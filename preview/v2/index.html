@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0c0e0b">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="NeoWorld-3 turns visual observations into simulation-ready 3D worlds by having coding agents write them as programs.">
+  <title>NeoWorld-3 · Worlds robots can use</title>
+  <link rel="icon" type="image/svg+xml" href="../brand/neoworld-favicon.svg">
+  <script>try{const t=localStorage.getItem('nw-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(_){}</script>
+  <link rel="preload" href="fonts/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="v2.css">
+  <script defer src="../vendor/three.min.js"></script>
+  <script defer src="../vendor/OBJLoader.js"></script>
+  <script defer src="../vendor/OrbitControls.js"></script>
+  <script defer src="../vendor/GLTFLoader.js"></script>
+  <script defer src="../vendor/DRACOLoader.js"></script>
+  <script defer src="../vendor/gsap.min.js"></script>
+  <script defer src="../vendor/ScrollTrigger.min.js"></script>
+  <script defer src="js/kit.js"></script>
+  <script defer src="js/scene-code.js"></script>
+  <script defer src="js/hero.js"></script>
+  <script defer src="js/anatomy.js"></script>
+  <script defer src="js/refine.js"></script>
+  <script defer src="js/compare.js"></script>
+  <script defer src="js/scene.js"></script>
+  <script defer src="js/gallery.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <a class="skip" href="#program">Skip to the article</a>
+  <!-- Paper-derived blocks sit between paper:start / paper:end. scripts/build-v2-public.py deletes them
+       and unwraps the <template data-public> that follows each one, so the public build never contains them. -->
+  <!-- paper:start -->
+  <div class="draft" role="note">LOCAL DRAFT · Parts of chapter 02 use a paper draft under double-blind review. Clear them with the team before publishing.</div>
+  <!-- paper:end --><template data-public><div class="draft" role="note">DESIGN PREVIEW · Not the official NeoWorld site. Sections based on unpublished results are left out.</div></template>
+  <div class="progress" aria-hidden="true"><i></i></div>
+
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="#top"><img src="../brand/neoworld-nw-small.svg" alt="">NeoWorld<sup>3</sup></a>
+      <nav aria-label="Main">
+        <a href="#program">World as code</a><a href="#refine-ch">Refinement</a><a href="#scene">Scene</a><a href="#objects">Objects</a>
+      </nav>
+      <button class="tbtn" id="theme-toggle" type="button"><span>Light</span></button>
+      <a class="tbtn" href="https://neoworldproject.github.io/Studio/?lang=en" target="_blank" rel="noopener">Studio ↗</a>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Chapters">
+    <a href="#program"><b>01</b>A world as code</a><a href="#refine-ch"><b>02</b>Refinement</a><a href="#scene"><b>03</b>Scene</a><a href="#objects"><b>04</b>Objects</a>
+  </nav>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div id="hero-world" aria-hidden="true"></div>
+      <div class="wrap">
+        <div class="hero-copy">
+          <p class="label">NeoWorld-3 · research</p>
+          <h1 id="hero-title">Worlds robots can <em>use</em>, not just look at.</h1>
+          <p class="lede">NeoWorld-3 turns photos into <b>simulation-ready 3D worlds</b>. Coding agents write every object as a program, with parts, joints and limits.</p>
+          <div class="cta"><a class="btn primary" href="#program">Start reading ↓</a><a class="btn" href="#scene">Explore the kitchen</a></div>
+        </div>
+      </div>
+      <p class="hero-note">Scene 01 · reconstructed coffee corner<br>move the pointer · scroll to turn</p>
+    </section>
+
+    <div class="wrap">
+      <!-- 01 -->
+      <section class="chapter" id="program" aria-labelledby="program-h">
+        <div class="chapter-head"><span class="num">01</span><p class="label">A world written as code</p><h2 id="program-h">Keep the recipe, not just the cake.</h2></div>
+        <div class="prose">
+          <p>Most 3D methods predict a finished surface in one step. NeoWorld-3 keeps something more useful: the program that builds the object. Change one number in it and every part that depends on that number follows.</p>
+          <div class="equation" aria-label="P equals S, theta, T">
+            <code>P = (S, θ, T)</code>
+            <div><b>S · source</b>the Python program that builds the parts</div>
+            <div><b>θ · knobs</b>named, bounded numbers such as a leg length</div>
+            <div><b>T · placement</b>where each object sits in the scene</div>
+          </div>
+          <p>The result is exported as URDF, the standard file robots and simulators read: links, joints, axes and limits. Drag the divider over the chair below to look underneath its surface.</p>
+        </div>
+        <div class="plate">
+          <div class="plate-bar"><span>Folding chair · 100520.urdf</span><span><b>5 links</b> · 4 revolute joints</span></div>
+          <div class="anatomy">
+            <div class="stage" id="anatomy-stage">
+              <div class="xray-tags" aria-hidden="true"><span>LOOKS REAL</span><span>WORKS REAL</span></div>
+              <button class="xray-handle" type="button" role="slider" aria-label="X-ray divider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span>⇆</span></button>
+              <span class="stage-status">Loading the chair…</span>
+              <span class="hint">drag the ⇆ handle · drag elsewhere to turn</span>
+            </div>
+            <div class="anatomy-side">
+              <div id="anatomy-joints"></div>
+              <div class="side-actions"><button class="btn primary" id="anatomy-fold" type="button">Fold the chair</button></div>
+              <pre class="code" id="anatomy-code" aria-live="polite" aria-label="URDF text of the selected joint"></pre>
+            </div>
+          </div>
+          <p class="plate-foot">The joint text is read live from <b>100520.urdf</b>. The limits are the real ones: the seat folds from 0° to −90°.</p>
+        </div>
+      </section>
+
+      <!-- 02 -->
+      <section class="chapter" id="refine-ch" aria-labelledby="refine-h">
+        <div class="chapter-head"><span class="num">02</span><p class="label">Reasoning meets gradients</p><h2 id="refine-h">The agent sketches. The optimiser measures.</h2></div>
+        <div class="prose">
+          <p>Language models are good at structure (“a chair with four legs and a tilted back”) but poor at exact numbers. So NeoWorld-3 splits the work. The agent writes the program; an optimiser then tunes its named knobs until renders match the photos.</p>
+          <!-- paper:start -->
+          <p>Two details matter. The optimiser moves a few meaningful knobs, not thousands of points, so one <span class="mono">leg_length</span> keeps all four legs equal. And a change is kept only when the photos say it is better, not when the optimiser's own score does.</p>
+          <!-- paper:end --><template data-public><p>Because the optimiser moves a few meaningful knobs rather than thousands of points, one <span class="mono">leg_length</span> keeps all four legs equal.</p></template>
+        </div>
+        <div class="plate" id="refine">
+          <div class="plate-bar"><span>Toy run in your browser</span><span id="refine-summary"></span></div>
+          <div class="refine">
+            <canvas id="refine-canvas" aria-label="Chair silhouette: dashed target, filled current program, faint candidates"></canvas>
+            <div class="refine-side">
+              <pre class="code" id="refine-code" aria-live="polite" style="border-top:0"></pre>
+              <canvas id="refine-chart" aria-label="Silhouette overlap per round; filled dots were admitted"></canvas>
+              <div class="readout"><span>round <b id="refine-step-out">0</b></span><span>silhouette IoU <b id="refine-iou">0</b></span></div>
+              <p class="note" id="refine-log" role="status" style="min-height:0"></p>
+            </div>
+          </div>
+          <div class="controls"><button class="btn primary" id="refine-play" type="button">Run the search</button><label class="label" for="refine-step">Round</label><input id="refine-step" type="range" min="0" max="22" value="0"></div>
+          <!-- paper:start -->
+          <p class="plate-foot">A small working model of the procedure: cross-entropy search over 4 knobs on a smoothed silhouette score, then a local polish. Each round is admitted only if the true silhouette overlap rises by at least <b>0.002</b>. The real system uses a differentiable GPU twin, several calibrated photos and Adam. This is not a recorded NeoWorld-3 run.</p>
+          <!-- paper:end --><template data-public><p class="plate-foot">A small illustration running in your browser: a search over 4 knobs against one silhouette, keeping a change only when the overlap clearly improves. It shows the idea; it is not a NeoWorld-3 run.</p></template>
+        </div>
+      </section>
+
+      <!-- 03 -->
+      <section class="chapter" id="scene" aria-labelledby="scene-h">
+        <div class="chapter-head"><span class="num">03</span><p class="label">From capture to scene</p><h2 id="scene-h">A coffee corner, rebuilt part by part.</h2></div>
+        <div class="compare-wrap">
+          <div id="compare" aria-label="Drag the two dividers to compare the capture, the reconstruction and its code">
+            <canvas></canvas>
+            <span class="wipe-tag" data-layer="0">CAPTURE</span><span class="wipe-tag" data-layer="1">RECONSTRUCTION</span><span class="wipe-tag" data-layer="2">CODE</span>
+            <button class="xray-handle" data-handle="0" type="button" role="slider" aria-label="Divider between capture and reconstruction" aria-valuemin="0" aria-valuemax="100" aria-valuenow="34"><span>⇆</span></button>
+            <button class="xray-handle" data-handle="1" type="button" role="slider" aria-label="Divider between reconstruction and code" aria-valuemin="0" aria-valuemax="100" aria-valuenow="68"><span>&lt;/&gt;</span></button>
+          </div>
+          <div class="prose">
+            <p>Three layers of the same office coffee corner. On the left, the stabilised video. In the middle, the scene NeoWorld Studio rebuilt from it, rendered from the same camera. On the right, what the rebuilt scene really is: code.</p>
+            <p>The two pictures can look alike. The difference is underneath. Drag the <span class="mono">&lt;/&gt;</span> divider and each object shows its own code, pinned above it as the camera moves: the operations and measurements from the scene's real construction record.</p>
+            <p class="aside">In <em>The Matrix</em>, Neo learns to see his world as code. This is the same idea, made literal.</p>
+            <p><button class="btn" id="compare-play" type="button">Play</button></p>
+          </div>
+        </div>
+        <div class="plate">
+          <div class="plate-bar"><span>Scene 01 · <span id="scene-count">loading…</span></span>
+            <span class="seg" role="group" aria-label="Look"><button type="button" data-scene-look="skin" aria-pressed="true">Rendered</button><button type="button" data-scene-look="parts" aria-pressed="false">Objects</button><button type="button" data-scene-look="wire" aria-pressed="false">Wire</button><button type="button" data-scene-look="code" aria-pressed="false">Code</button></span></div>
+          <div class="scene-body" id="scene-body">
+            <div class="stage" id="scene-stage">
+              <span class="stage-status">Loading the kitchen (2.3 MB)…</span>
+              <div class="part-tip" hidden></div>
+              <span class="hint">hover a part to read its name · drag to turn · in Code, click a part</span>
+            </div>
+            <aside class="scene-code" id="scene-code-panel" hidden aria-label="Construction record of the selected object">
+              <div class="scene-code-head"><b id="scene-code-title">Loading…</b><span>construction record from scene.glb</span></div>
+              <pre class="code" id="scene-code"></pre>
+              <p class="scene-code-key"><span class="k-op">coloured part</span> built by a recorded SDK operation · <span class="k-mesh">grey part</span> stored as a mesh · <span class="k-phys">blue lines</span> example physical properties</p>
+            </aside>
+          </div>
+          <div class="chips" id="scene-legend" aria-label="Objects in the scene: click to isolate one"></div>
+        </div>
+      </section>
+
+      <!-- 04 -->
+      <section class="chapter" id="objects" aria-labelledby="objects-h">
+        <div class="chapter-head"><span class="num">04</span><p class="label">Articulated objects</p><h2 id="objects-h">Ten objects. Every joint explicit.</h2></div>
+        <div class="prose"><p>Each object below was rebuilt from a single image, shown on the left. Every moving part has a declared joint type, axis and range. Play the motion, colour the parts, or show the joint axes.</p></div>
+        <div class="plate">
+          <div class="picker" id="gallery-picker" aria-label="Choose an object"></div>
+          <div class="gallery">
+            <figure><img id="gallery-ref" alt="" src="../assets/batch5_collision_references_image3/10449_image_3.png"><figcaption id="gallery-ref-cap">Source image</figcaption></figure>
+            <div class="stage" id="gallery-stage"><span class="stage-status">Loading…</span><span class="hint">drag to turn · scroll to zoom</span></div>
+            <div class="gallery-side">
+              <h3 id="gallery-title">Scissors · 10449</h3>
+              <p class="sub" id="gallery-summary">&nbsp;</p>
+              <div class="side-actions">
+                <button class="btn primary" id="gallery-play" type="button" aria-pressed="false">Play motion</button>
+                <span class="seg" role="group" aria-label="Look"><button type="button" data-gallery-look="skin" aria-pressed="true">Surface</button><button type="button" data-gallery-look="parts" aria-pressed="false">Parts</button><button type="button" data-gallery-look="wire" aria-pressed="false">Wire</button></span>
+                <button class="btn" id="gallery-axes" type="button" aria-pressed="false">Joint axes</button>
+              </div>
+              <div id="gallery-joints"></div>
+            </div>
+          </div>
+          <p class="plate-foot">Kinematic viewer: joints move within their URDF limits. It shows motion, not a physics simulation.</p>
+        </div>
+      </section>
+
+    </div>
+
+    <section class="closing wrap" aria-label="Outlook">
+      <p class="label" style="margin-bottom:22px">Looking ahead</p>
+      <p>If every real-world observation can become a world a robot can practise in, <em>the physical world becomes trainable.</em></p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>NeoWorld-3 · draft redesign</span>
+      <span><a href="https://neoworldproject.github.io/Studio/?lang=en" target="_blank" rel="noopener">NeoWorld Studio ↗</a> · <a href="https://github.com/mulan2022/NeoWorld" target="_blank" rel="noopener">Source ↗</a> · <a href="../">Current site</a> · <a href="#top">Top ↑</a></span>
+    </div>
+  </footer>
+</body>
+</html>

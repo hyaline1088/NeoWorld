@@ -1,0 +1,61 @@
+{
+  "note": "Example physical properties for demonstration. Typical handbook values per material; not part of the NeoWorld-3 reconstruction record.",
+  "units": { "density": "kg/m^3", "friction": "static coefficient" },
+  "objects": {
+    "s1-coffee-machine": [
+      { "match": "rubber support", "material": "silicone rubber", "short": "silicone", "density": 1150, "friction": 0.9 },
+      { "match": "chrome|silver|outlet|nozzle|drip|cup support", "material": "stainless steel 304", "short": "steel 304", "density": 7930, "friction": 0.45 },
+      { "match": "glossy|fascia|emblem|control|button|selection|lid inset", "material": "PMMA acrylic", "short": "acrylic", "density": 1180, "friction": 0.5 },
+      { "match": ".", "material": "ABS plastic", "short": "ABS", "density": 1050, "friction": 0.4 }
+    ],
+    "s1-floor-cabinet-measured": [
+      { "match": "mixer|aerator|spout", "material": "chrome-plated brass", "short": "chrome brass", "density": 8500, "friction": 0.35 },
+      { "match": "sink|waste|strainer|overflow|deck_cap", "material": "stainless steel 304", "short": "steel 304", "density": 7930, "friction": 0.45 },
+      { "match": "stone|countertop|upstand", "material": "engineered quartz", "short": "quartz", "density": 2400, "friction": 0.55 },
+      { "match": "plinth", "material": "PVC", "short": "PVC", "density": 1400, "friction": 0.4 },
+      { "match": "sticker|warm_strip", "material": "PET film", "short": "PET", "density": 1380, "friction": 0.3 },
+      { "match": ".", "material": "OSB board", "short": "OSB", "density": 620, "friction": 0.45 }
+    ],
+    "s1-microwave-003": [
+      { "match": "glazing|lens", "material": "soda-lime glass", "short": "glass", "density": 2500, "friction": 0.4 },
+      { "match": "foot", "material": "silicone rubber", "short": "silicone", "density": 1150, "friction": 0.9 },
+      { "match": "knob|button|pull|standoff|fascia|readout", "material": "ABS plastic", "short": "ABS", "density": 1050, "friction": 0.45 },
+      { "match": "sticker|print|stamped|face", "material": "PET film", "short": "PET", "density": 1380, "friction": 0.3 },
+      { "match": ".", "material": "powder-coated steel", "short": "coated steel", "density": 7850, "friction": 0.45 }
+    ],
+    "s1-hanging-cabinet-measured": [
+      { "match": "sticker", "material": "PET film", "short": "PET", "density": 1380, "friction": 0.3 },
+      { "match": ".", "material": "OSB board", "short": "OSB", "density": 620, "friction": 0.45 }
+    ],
+    "s1-stool-left": [
+      { "match": "seat", "material": "PU leather over foam", "short": "PU foam", "density": 300, "friction": 0.7 },
+      { "match": "label", "material": "PET film", "short": "PET", "density": 1380, "friction": 0.3 },
+      { "match": ".", "material": "solid beech", "short": "beech", "density": 720, "friction": 0.5 }
+    ],
+    "s1-stool-right": [
+      { "match": "seat", "material": "PU leather over foam", "short": "PU foam", "density": 300, "friction": 0.7 },
+      { "match": "label", "material": "PET film", "short": "PET", "density": 1380, "friction": 0.3 },
+      { "match": ".", "material": "solid beech", "short": "beech", "density": 720, "friction": 0.5 }
+    ],
+    "scene1-right-group": [
+      { "match": "tea_tin", "material": "tinplate steel", "short": "tinplate", "density": 7850, "friction": 0.4 },
+      { "match": "blue_box", "material": "cardboard", "short": "cardboard", "density": 700, "friction": 0.5 },
+      { "match": "bag", "material": "polyester fabric", "short": "polyester", "density": 200, "friction": 0.6 },
+      { "match": "waste_bin", "material": "polypropylene", "short": "PP", "density": 905, "friction": 0.35 },
+      { "match": "countertop", "material": "engineered quartz", "short": "quartz", "density": 2400, "friction": 0.55 },
+      { "match": ".", "material": "OSB board", "short": "OSB", "density": 620, "friction": 0.45 }
+    ],
+    "s1-wall-power-accessories": [
+      { "match": "cord|relief", "material": "PVC", "short": "PVC", "density": 1400, "friction": 0.6 },
+      { "match": ".", "material": "polycarbonate", "short": "PC", "density": 1200, "friction": 0.4 }
+    ],
+    "s1-coffee-power-detail": [
+      { "match": "cord", "material": "PVC", "short": "PVC", "density": 1400, "friction": 0.6 },
+      { "match": ".", "material": "polycarbonate", "short": "PC", "density": 1200, "friction": 0.4 }
+    ],
+    "s1-left-glass-door-visible-partial": [
+      { "match": "patch", "material": "tempered glass", "short": "glass", "density": 2500, "friction": 0.4 },
+      { "match": ".", "material": "aluminium", "short": "aluminium", "density": 2700, "friction": 0.45 }
+    ]
+  }
+}

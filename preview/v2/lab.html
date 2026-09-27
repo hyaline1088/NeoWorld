@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0c0e0b">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="NeoWorld-3 turns visual observations into simulation-ready 3D worlds by having coding agents write them as programs.">
+  <title>NeoWorld-3 demo lab</title>
+  <link rel="icon" type="image/svg+xml" href="../brand/neoworld-favicon.svg">
+  <script>try{const t=localStorage.getItem('nw-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(_){}</script>
+  <link rel="preload" href="fonts/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="v2.css">
+  <script defer src="../vendor/three.min.js"></script>
+  <script defer src="../vendor/OBJLoader.js"></script>
+  <script defer src="../vendor/OrbitControls.js"></script>
+  <script defer src="../vendor/GLTFLoader.js"></script>
+  <script defer src="../vendor/DRACOLoader.js"></script>
+  <script defer src="../vendor/gsap.min.js"></script>
+  <script defer src="../vendor/ScrollTrigger.min.js"></script>
+  <script defer src="js/kit.js"></script>
+  <script defer src="js/scene-code.js"></script>
+  <script defer src="js/hero.js"></script>
+  <script defer src="js/door.js"></script>
+  <script defer src="js/anatomy.js"></script>
+  <script defer src="js/refine.js"></script>
+  <script defer src="js/compare.js"></script>
+  <script defer src="js/scene.js"></script>
+  <script defer src="js/gallery.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <div class="draft" role="note">DEMO LAB · Not linked from the page and not published. Demos kept for later; some use the paper draft under double-blind review.</div>
+  <div class="progress" aria-hidden="true"><i></i></div>
+  <header class="top"><div class="wrap"><a class="brand" href="./"><img src="../brand/neoworld-nw-small.svg" alt="">NeoWorld<sup>3</sup></a><button class="tbtn" id="theme-toggle" type="button" style="margin-left:auto"><span>Light</span></button></div></header>
+  <nav class="toc" aria-label="Chapters"></nav>
+  <main id="top">
+    <div class="facts" aria-label="At a glance">
+      <div><strong>10</strong><span>articulated objects on this page</span></div>
+      <div><strong>32</strong><span>joints you can move</span></div>
+      <div><strong>1</strong><span>kitchen corner rebuilt from video</span></div>
+      <div><strong>180</strong><span>named parts in that one scene</span></div>
+    </div>
+    <div class="wrap">
+      <!-- 01 -->
+      <section class="chapter" id="idea" aria-labelledby="idea-h">
+        <div class="chapter-head"><span class="num">01</span><p class="label">The idea</p><h2 id="idea-h">A movie set is not a house.</h2></div>
+        <div class="split">
+          <div class="prose">
+            <p>AI grew fast by learning from huge amounts of data. Robots cannot do the same in the real world: every try is slow, costly, and sometimes breaks things. They need practice worlds, built from real places, where they can try millions of times.</p>
+            <p>A photo-realistic 3D scan looks like such a world, but it is a movie set. The cupboard is painted on. Nothing opens, nothing has weight, nothing can be pushed.</p>
+            <p class="pull">Embodied intelligence needs worlds it can interact with, not just worlds it can see.</p>
+            <p class="aside">Try it: the door on the right is a real NeoWorld-3 reconstruction (object 8994). Switch between the two ways of storing it and click.</p>
+          </div>
+          <div class="plate" style="margin-top:0">
+            <div class="plate-bar"><span>Same door, two representations</span>
+              <span class="seg" role="group" aria-label="Representation"><button type="button" data-door-mode="set" aria-pressed="true">Movie set</button><button type="button" data-door-mode="sim" aria-pressed="false">Sim-ready</button></span></div>
+            <div class="stage" id="door-stage" tabindex="0" role="img" aria-label="3D door. Click to interact; drag to turn."><span class="hint">drag to turn · click the door</span></div>
+            <p class="note" id="door-note" role="status">Loading the door…</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 -->
+      <section class="chapter" id="loop" aria-labelledby="loop-h">
+        <div class="chapter-head"><span class="num">02</span><p class="label">Real → sim → real</p><h2 id="loop-h">One loop from a photo to a robot and back.</h2></div>
+        <div class="loop">
+          <div class="loop-graphic" aria-hidden="true">
+            <svg viewBox="0 0 400 400">
+              <path class="loop-arc" d="M200 60 A140 140 0 0 1 340 200"/>
+              <path class="loop-arc" d="M340 200 A140 140 0 0 1 200 340"/>
+              <path class="loop-arc" d="M200 340 A140 140 0 0 1 60 200"/>
+              <path class="loop-arc" d="M60 200 A140 140 0 0 1 200 60"/>
+              <g class="loop-node"><circle cx="200" cy="60" r="13"/><text x="200" y="30" text-anchor="middle">OBSERVE</text></g>
+              <g class="loop-node"><circle cx="340" cy="200" r="13"/><text x="340" y="236" text-anchor="middle">RECONSTRUCT</text></g>
+              <g class="loop-node"><circle cx="200" cy="340" r="13"/><text x="200" y="376" text-anchor="middle">SIMULATE</text></g>
+              <g class="loop-node"><circle cx="60" cy="200" r="13"/><text x="60" y="236" text-anchor="middle">DEPLOY</text></g>
+              <text class="loop-core" x="200" y="196" text-anchor="middle">REAL → SIM</text>
+              <text class="loop-core" x="200" y="216" text-anchor="middle">→ REAL</text>
+            </svg>
+          </div>
+          <div class="loop-steps">
+            <div class="loop-step" data-step="0"><p class="label">1 · Observe</p><h3>Start from what a camera sees.</h3><p>A few photos or a short video of a real place, with the camera positions they were taken from.</p></div>
+            <div class="loop-step" data-step="1"><p class="label">2 · Reconstruct</p><h3>Agents write the world as code.</h3><p>Coding agents build each object as a program with parts, joints and limits, check it against the photos, and fix only what is wrong.</p></div>
+            <div class="loop-step" data-step="2"><p class="label">3 · Simulate &amp; train</p><h3>Drop it into a physics simulator.</h3><p>Because every part has a shape, a joint and a collision surface, robots can push, open and grasp things, and practise at scale.</p></div>
+            <div class="loop-step" data-step="3"><p class="label">4 · Deploy</p><h3>Carry the skill back to the real robot.</h3><p>A plan rehearsed in the twin runs on the real machine. What the robot then sees becomes the next observation, and the loop starts again.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 -->
+      <section class="chapter" id="agent" aria-labelledby="agent-h">
+        <div class="chapter-head"><span class="num">04</span><p class="label">How the agent builds</p><h2 id="agent-h">The model proposes. The harness admits.</h2></div>
+        <div class="prose">
+          <p>A vision-language agent does the building. Through <strong>NeoMCP</strong> it can measure the photos, write and run modelling code, render from the real camera positions, and compare. <strong>NeoSDK</strong> supplies the geometry, rendering and optimisation tools underneath.</p>
+          <p>For a whole scene, one coordinating agent keeps the room consistent and hands single objects to specialist agents. A returned object is merged only if it is no worse than what it replaces, and nothing else moved.</p>
+        </div>
+        <div class="plate">
+          <div class="plate-bar"><span>One object, one loop</span><span>live renders from the URDF viewer</span></div>
+          <div class="flow">
+            <figure><img src="../assets/reference_image_3_5ids/reference_image_3/100520.png" alt="Source photo of a folding chair" loading="lazy"><figcaption><b>Observe</b><span>The photo and its silhouette</span></figcaption></figure>
+            <figure><img src="../assets/architecture/audit.gif" alt="Wireframe audit of the chair" loading="lazy"><figcaption><b>Audit</b><span>Which part is wrong, and how?</span></figcaption></figure>
+            <figure><img src="../assets/architecture/place-render.gif" alt="Chair rendered from the target view" loading="lazy"><figcaption><b>Place &amp; render</b><span>Render from the photo's camera</span></figcaption></figure>
+            <figure><img src="../assets/architecture/fit.gif" alt="Chair parameters being fitted" loading="lazy"><figcaption><b>Fit</b><span>Tune the named knobs</span></figcaption></figure>
+            <figure><img src="../assets/architecture/admit.gif" alt="Solid and wireframe comparison before admission" loading="lazy"><figcaption><b>Admit</b><span>Keep it only if the photos agree</span></figcaption></figure>
+            <p class="return">not better? → return to Audit with the reason</p>
+          </div>
+        </div>
+        <!-- paper:start -->
+        <div class="rules">
+          <div class="rule"><h3>The source is the state</h3><p>Every kept result is a program that can be re-run and edited, never a frozen mesh.</p><p class="plain">You keep the recipe, not just the cake.</p></div>
+          <div class="rule"><h3>The model proposes; the harness admits</h3><p>The agent suggests changes. Fixed rules decide what is kept, and never quietly edit a value to make a program pass.</p><p class="plain">The student writes the essay; the examiner grades it.</p></div>
+          <div class="rule"><h3>Search in the twin, admit in Blender</h3><p>Many candidate fits are tried in a fast GPU copy of the program. Only the best are rebuilt in Blender and checked.</p><p class="plain">Practise in the simulator, take the exam in the real plane.</p></div>
+          <div class="rule"><h3>Claims stay bound to evidence</h3><p>A check that finds no problem reports “unrefuted”, not “verified”. Unknown joint limits stay labelled unknown.</p><p class="plain">“No leaks found” is not the same as “waterproof”.</p></div>
+          <div class="rule"><h3>Everything is bounded</h3><p>Model calls, time and images are counted and capped, and running out is recorded as its own outcome.</p><p class="plain">A fixed budget keeps the work honest.</p></div>
+        </div>
+        <!-- paper:end --><template data-public><div class="redacted"><span class="label">Hidden in this preview</span><p>Five design rules the system follows. They come from unpublished material and will appear here once it is public.</p></div></template>
+      </section>
+
+      <!-- 06 -->
+      <section class="chapter" id="physics-ch" aria-labelledby="physics-h">
+        <div class="chapter-head"><span class="num">06</span><p class="label">Physical validity</p><h2 id="physics-h">Pretty is not the same as solid.</h2></div>
+        <div class="prose">
+          <p>A render hides problems that physics finds at once: open holes, faces glued together wrongly, parts that pass through each other when they move. NeoWorld-3 checks the mesh directly by counting how many faces meet at every edge.</p>
+        </div>
+        <div class="plate">
+          <div class="plate-bar"><span>The edge rule</span><span>checked on the native mesh</span></div>
+          <div class="edges">
+            <figure>
+              <svg viewBox="0 0 200 120" aria-hidden="true"><path class="svg-face" d="M30 80 100 20 100 100Z"/><path class="svg-face" d="M170 80 100 20 100 100Z"/><path class="svg-ok" d="M100 20V100" stroke-width="4"/></svg>
+              <figcaption><b style="color:var(--accent)">2 faces · closed</b>Every edge shared by exactly two faces. Water cannot leak out.</figcaption>
+            </figure>
+            <figure>
+              <svg viewBox="0 0 200 120" aria-hidden="true"><path class="svg-face" d="M30 80 100 20 100 100Z"/><path d="M170 80 100 20 100 100Z" fill="none" class="svg-bad" stroke-dasharray="4 5" stroke-width="1.5"/><path class="svg-bad" d="M100 20V100" stroke-width="4"/></svg>
+              <figcaption><b style="color:var(--bad)">1 face · open hole</b>An edge with one face is a boundary. Collisions and volume become unreliable.</figcaption>
+            </figure>
+            <figure>
+              <svg viewBox="0 0 200 120" aria-hidden="true"><path class="svg-face" d="M30 80 100 20 100 100Z"/><path class="svg-face" d="M170 80 100 20 100 100Z"/><path class="svg-face" d="M140 112 100 20 100 100Z" style="fill:color-mix(in srgb,var(--warn) 25%,transparent)"/><path class="svg-warn" d="M100 20V100" stroke-width="4"/></svg>
+              <figcaption><b style="color:var(--warn)">3+ faces · non-manifold</b>More than two faces on one edge. The surface has no clear inside.</figcaption>
+            </figure>
+          </div>
+          <p class="plate-foot">Repair is deliberately narrow: where two seams clearly coincide, it reconnects them <b>without moving any vertex</b>, then checks again. It fills no holes and never merges parts that move separately.</p>
+        </div>
+        <!-- paper:start -->
+        <div class="prose" style="margin-top:48px">
+          <p>Joints get their own test. Each declared joint is swept through its range to see whether parts collide, detach or leave their parent. What does this check buy? The paper switched it off to find out.</p>
+        </div>
+        <div class="plate" id="physics" data-on="33.33,75" data-off="100,0">
+          <div class="plate-bar"><span>Ablation · RoboCasa365 kitchens · <b>draft result</b></span>
+            <span class="seg" role="group" aria-label="Articulation physics check"><button type="button" data-physics="on" aria-pressed="true">Check on</button><button type="button" data-physics="off" aria-pressed="false">Check off</button></span></div>
+          <div class="physics-body">
+            <div class="big"><span>Articulated objects with intersecting parts ↓</span><span class="track"><span class="fill" id="pen-fill" style="--w:33.33%"></span></span><span class="val" id="pen-val">33%</span></div>
+            <div class="big"><span>Objects that stay standing under gravity ↑</span><span class="track"><span class="fill" id="stab-fill" style="--w:75%"></span></span><span class="val" id="stab-val">75%</span></div>
+          </div>
+          <p class="note" id="physics-note" role="status"><b>Full system.</b> A third of articulated objects still have intersecting parts, and three in four stay standing.</p>
+        </div>
+        <!-- paper:end --><template data-public><div class="prose" style="margin-top:48px"><p>Joints get their own test. Each declared joint is swept through its range to see whether parts collide, detach or leave their parent.</p></div>
+        <div class="redacted"><span class="label">Hidden in this preview</span><p>An interactive switch showing what happens when this check is turned off. It uses unpublished results.</p></div></template>
+      </section>
+
+      <!-- 09 -->
+      <section class="chapter" id="evidence" aria-labelledby="evidence-h">
+        <div class="chapter-head"><span class="num">09</span><p class="label">Evidence</p><h2 id="evidence-h">What the benchmarks say.</h2></div>
+        <!-- paper:start -->
+        <script type="application/json" id="evidence-data">[
+          { "t": "Shape error", "s": "Chamfer distance ↓ · 212 objects", "d": 4, "rows": [["Codex + MCP", 0.0747], ["VIGA", 0.0680], ["Articraft", 0.0719], ["NeoWorld-3", 0.0365]] },
+          { "t": "Silhouette match", "s": "Framed IoU ↑ · 212 objects", "d": 3, "rows": [["Codex + MCP", 0.5736], ["VIGA", 0.6547], ["Articraft", 0.5692], ["NeoWorld-3", 0.7550]] },
+          { "t": "Joint pivot error", "s": "Pivot error ↓ · 77 articulated objects", "d": 3, "rows": [["Codex + MCP", 0.2846], ["Articraft", 0.1532], ["NeoWorld-3", 0.0962]] },
+          { "t": "Joint type correct", "s": "Type accuracy ↑ · 77 articulated objects", "d": 1, "pct": 1, "rows": [["Codex + MCP", 87.16], ["Articraft", 87.22], ["NeoWorld-3", 90.13]] },
+          { "t": "Scene matches the photos", "s": "DINOv3 similarity ↑ · 10 kitchens", "d": 3, "rows": [["Codex + MCP", 0.5138], ["VIGA", 0.6464], ["NeoWorld-3", 0.8331]] },
+          { "t": "Stable under gravity", "s": "Objects that stay put ↑ · 10 kitchens", "d": 1, "pct": 1, "rows": [["Codex + MCP", 61.91], ["VIGA", 70.66], ["NeoWorld-3", 87.74]] }
+        ]</script>
+        <div class="prose">
+          <p>The paper compares NeoWorld-3 with other coding-agent methods, all using the same language model, on objects (3DCodeBench), articulated objects (PartNet-Mobility) and full kitchens (RoboCasa365). NeoWorld-3 leads on every measure shown here.</p>
+        </div>
+        <div class="caution" role="note"><span class="label">Draft numbers</span>These come from a paper under double-blind review. Confirm with the team before this chapter goes public.</div>
+        <div class="plate">
+          <div class="plate-bar"><span>Six results · each chart has its own scale</span><span>hover a bar for the method</span></div>
+          <div class="evidence" id="evidence-grid"></div>
+          <div class="legend"><span><i style="background:var(--accent-fill)"></i>NeoWorld-3</span><span><i style="background:#6b7564"></i>Other coding-agent methods</span><span>↓ lower is better · ↑ higher is better</span></div>
+        </div>
+        <!-- paper:end --><template data-public><div class="redacted"><span class="label">Hidden in this preview</span><p>Benchmark comparisons against other methods, shown as six small charts. They will appear here once the results are public.</p></div></template>
+      </section>
+
+      <!-- 10 -->
+      <section class="chapter" id="robot" aria-labelledby="robot-h">
+        <div class="chapter-head"><span class="num">10</span><p class="label">Real → sim → real</p><h2 id="robot-h">Rehearse in the twin. Act in the real world.</h2></div>
+        <!-- paper:start -->
+        <div class="prose">
+          <p>The rebuilt world is handed to a robot planner. It finds the task object with its own cameras, plans a grasp, and rehearses it in the twin. A plan is kept only if it works in at least <strong>four of five</strong> rehearsals, each with the object nudged, turned, made heavier or lighter, and made more or less slippery. Then it runs once on the real target, without looking back.</p>
+          <p class="aside">Click the rehearsals to pass or fail them and watch the rule decide.</p>
+        </div>
+        <div class="plate" id="rehearsal">
+          <div class="plate-bar"><span>The 4-of-5 rule</span><span>perturbed rehearsals in the twin</span></div>
+          <div class="rehearse">
+            <button class="trial" type="button" aria-pressed="true"><svg viewBox="0 0 120 80" aria-hidden="true"><line class="svg-table" x1="8" y1="62" x2="112" y2="62" stroke-width="2"/><rect class="svg-box" x="48" y="38" width="24" height="24"/></svg><b>Rehearsal 1</b><small>as seen</small><span class="mark"></span></button>
+            <button class="trial" type="button" aria-pressed="true"><svg viewBox="0 0 120 80" aria-hidden="true"><line class="svg-table" x1="8" y1="62" x2="112" y2="62" stroke-width="2"/><rect class="svg-box" x="55" y="38" width="24" height="24"/></svg><b>Rehearsal 2</b><small>+1 cm · mass ×2</small><span class="mark"></span></button>
+            <button class="trial" type="button" aria-pressed="true"><svg viewBox="0 0 120 80" aria-hidden="true"><line class="svg-table" x1="8" y1="62" x2="112" y2="62" stroke-width="2"/><rect class="svg-box" x="48" y="38" width="24" height="24" transform="rotate(10 60 50)"/></svg><b>Rehearsal 3</b><small>turned 10° · friction 0.6</small><span class="mark"></span></button>
+            <button class="trial" type="button" aria-pressed="false"><svg viewBox="0 0 120 80" aria-hidden="true"><line class="svg-table" x1="8" y1="62" x2="112" y2="62" stroke-width="2"/><rect class="svg-box" x="41" y="38" width="24" height="24" transform="rotate(-10 53 50)"/></svg><b>Rehearsal 4</b><small>−1 cm · −10° · mass ×0.5</small><span class="mark"></span></button>
+            <button class="trial" type="button" aria-pressed="true"><svg viewBox="0 0 120 80" aria-hidden="true"><line class="svg-table" x1="8" y1="62" x2="112" y2="62" stroke-width="2"/><rect class="svg-box" x="52" y="38" width="24" height="24"/></svg><b>Rehearsal 5</b><small>friction 1.2</small><span class="mark"></span></button>
+          </div>
+          <p class="note" id="rehearsal-verdict" role="status"></p>
+        </div>
+        <div class="plate">
+          <div class="plate-bar"><span>Two-arm ALOHA robot · planned in a MuJoCo twin · <b>draft</b></span><span>footage pending</span></div>
+          <div class="footage">
+            <div><p><b>REAL ROBOT</b>Video from the team goes here</p></div>
+            <div><p><b>RECONSTRUCTED TWIN</b>Synced replay goes here</p></div>
+          </div>
+          <p class="plate-foot">The paper shows the real run and its twin side by side. The plan is computed in the twin and replayed open-loop on the physical robot. No success rate is reported, so this page does not claim one.</p>
+        </div>
+        <!-- paper:end --><template data-public><div class="prose"><p>A reconstructed world is only useful if a robot can act in it. The plan: rehearse a task in the rebuilt twin, then carry it out on the real robot, and feed what the robot sees back into the next reconstruction.</p></div>
+        <div class="redacted"><span class="label">Hidden in this preview</span><p>A real-robot experiment and an interactive explainer of how plans are checked before they run. Coming once the results are public.</p></div></template>
+      </section>
+
+      <!-- 11 -->
+      <section class="chapter" id="why" aria-labelledby="why-h">
+        <div class="chapter-head"><span class="num">11</span><p class="label">Common questions</p><h2 id="why-h">Why not just use…?</h2></div>
+        <div class="faq">
+          <details open><summary>…3D Gaussian splatting or NeRF?</summary><p>They produce beautiful views, but store no parts, joints or collision surfaces. There is nothing for a gripper to hold or a hinge to turn. It is the movie set from chapter 01.</p></details>
+          <details><summary>…an image-to-3D generator?</summary><p>Generators recover rich surface detail, but return a finished mesh. There is no construction left to edit, so you cannot lengthen one leg and have the others follow.</p></details>
+          <details><summary>…a video world model?</summary><p>Interactive video models draw the next frames from actions, but keep no lasting 3D state. Geometry can drift between frames and cannot be edited. NeoWorld-3 keeps an explicit program that every image is checked against.</p></details>
+          <details><summary>…a simulation-asset generator?</summary><p>Some tools output simulation-ready assets directly, but as finished products. If you disagree with how an object was split into parts, you cannot rewrite it. Here, the source program is the asset.</p></details>
+        </div>
+      </section>
+
+      <!-- 12 -->
+      <section class="chapter" id="limits" aria-labelledby="limits-h">
+        <div class="chapter-head"><span class="num">12</span><p class="label">Honest limits</p><h2 id="limits-h">What it cannot do yet.</h2></div>
+        <!-- paper:start -->
+        <div class="limits">
+          <div><h3>Cameras miss physics</h3><p>Mass, friction, and joint limits hidden inside a cabinet cannot be seen from outside. Robots pushing or touching things could help measure them.</p></div>
+          <div><h3>It is not yet fast</h3><p>Rebuilding a scene takes too long for a robot that must replan many times a second. Cached programs and small local updates are next.</p></div>
+          <div><h3>Self-improvement is early</h3><p>The system can propose new tools from its own work logs, but no proposed tool has been adopted yet.</p></div>
+          <div><h3>Closed cabinets</h3><p>In the robot kitchens, cabinet bodies are closed shells, so tasks that open fixtures are out of scope for now.</p></div>
+        </div>
+        <!-- paper:end --><template data-public><div class="redacted"><span class="label">Hidden in this preview</span><p>A short list of current limitations, taken from unpublished material.</p></div></template>
+      </section>
+    </div>
+  </main>
+  <footer><div class="wrap"><span>NeoWorld-3 · demo lab</span><span><a href="./">Back to the page</a></span></div></footer>
+</body>
+</html>
