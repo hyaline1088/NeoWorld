@@ -77,15 +77,17 @@
         m.material = look === 'parts' ? m.userData.part : look === 'wire' ? m.userData.wire : look === 'code' ? m.userData.code : m.userData.skin;
         const dim = isolated && m.userData.entity !== isolated;
         if (look !== 'skin') m.material.opacity = dim ? (look === 'code' ? .08 : .12) : (look === 'wire' ? .55 : 1);
-        m.visible = !(look === 'skin' && dim && m.userData.entity !== 'Background');
+        m.visible = true; // Rendered always shows the whole scene; other views dim instead of hiding
       }
       v.dirty = true;
     }
     function setLook(next) {
+      const was = look;
       look = next; buttons.forEach(x => x.setAttribute('aria-pressed', String(x.dataset.sceneLook === look)));
       const coding = look === 'code' && !!record;
       body.classList.toggle('coding', coding); codePanel.hidden = !coding;
-      if (coding && !isolated) selectEntity(names.find(n => opsIn(n)) || names[0]);
+      // Switching views starts from the whole scene; Code always shows one object's listing.
+      if (was !== look) selectEntity(coding ? (names.find(n => opsIn(n)) || names[0]) : null);
       paint();
     }
     buttons.forEach(b => b.addEventListener('click', () => setLook(b.dataset.sceneLook)));
@@ -101,6 +103,10 @@
         if (line.node) {
           const key = sanitize(line.node); span.dataset.node = key; lineEls.set(key, span);
           span.addEventListener('pointerenter', () => glowParts(meshesByNode.get(key) || []));
+          span.addEventListener('pointerleave', () => glowParts([]));
+        } else if (line.nodes) { // a physics line lights up every part made of that material
+          const list = line.nodes.flatMap(n => meshesByNode.get(sanitize(n)) || []);
+          span.addEventListener('pointerenter', () => glowParts(list));
           span.addEventListener('pointerleave', () => glowParts([]));
         }
         return span;
@@ -127,8 +133,8 @@
       chip.setAttribute('aria-pressed', 'false');
       chip.addEventListener('click', () => {
         if (look === 'code') { selectEntity(n); return; }
+        if (look === 'skin') setLook('parts'); // isolating an object needs the Objects view
         selectEntity(isolated === n ? null : n);
-        if (look === 'skin' && isolated) setLook('parts');
       });
       legend.append(chip);
     }

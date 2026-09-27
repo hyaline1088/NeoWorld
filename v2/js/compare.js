@@ -17,7 +17,7 @@
   const poster = new Image(); poster.src = `${NW.ASSETS}studio/posters/scene-01.jpg`;
   const BAR = 32 / 1472; // label bar height as a fraction of the frame
   const MIN_GAP = .06;
-  const SHOWN = ['microwave', 'stool_left', 'stool_right', 'hanging_cabinet', 'floor_cabinet', 'coffee_machine'];
+  const SHOWN = ['microwave', 'stool_left', 'stool_right', 'floor_cabinet', 'coffee_machine'];
   let split = [.34, .68], source = poster, loaded = false, visible = false;
 
   /* Labels: the object's name line and its two largest parts, written as code from the construction record. */
@@ -26,20 +26,27 @@
   const short = v => Array.isArray(v) ? `(${v.map(short).join(', ')})` : typeof v === 'number' ? String(Math.round(v * 1e4) / 1e4) : `"${v}"`;
   const clip = (s, n) => s.length > n ? s.slice(0, n - 1) + '…' : s;
   const volume = p => (p.size || [0, 0, 0]).reduce((a, b) => a * b, 1);
-  function labelFor(e) {
+  // The floor cabinet's label sits on the tap, so it shows the tap's parts.
+  const FOCUS = { floor_cabinet: /mixer|spout|aerator/ };
+  function labelFor(e, id) {
     const name = NW.pretty(e.id).replace(/\s+/g, '_').toLowerCase();
-    const parts = [...e.parts].sort((a, b) => (!!b.op - !!a.op) || volume(b) - volume(a)).slice(0, 2);
-    return [
-      clip(`${name} = scene.object(`, 34),
-      ...parts.map(p => clip(p.op
+    const pool = FOCUS[id] ? e.parts.filter(p => FOCUS[id].test(p.part)) : e.parts;
+    const parts = [...pool].sort((a, b) => (!!b.op - !!a.op) || volume(b) - volume(a)).slice(0, 1);
+    const lines = [
+      { text: clip(`${name} = scene.object(`, 38), kind: 'head' },
+      ...parts.map(p => ({ kind: 'op', text: clip(p.op
         ? `  .${p.op}("${p.part}"${(k => k ? `, ${k}=${short(p.params[k])}` : '')(KEY.find(k => k in p.params))})`
-        : `  .mesh("${p.part}")`, 34)),
+        : `  .mesh("${p.part}")`, 38) })),
     ];
+    // Example physical properties (demonstration values) for the material of the part shown.
+    const g = parts[0]?.physics;
+    if (g) lines.push({ kind: 'phys', text: clip(`  .physics("${g.short}", ρ=${g.density}, μ=${g.friction})`, 38) });
+    return lines;
   }
   Promise.all([NW.sceneRecord(), fetch('data/scene-01-tracks.json').then(r => r.json())]).then(([rec, tr]) => {
     const byNode = new Map(rec.entities.map(e => [e.node, e]));
     tracks = tr;
-    for (const o of tr.objects) if (SHOWN.includes(o.id) && byNode.has(o.entity)) labels.set(o.id, labelFor(byNode.get(o.entity)));
+    for (const o of tr.objects) if (SHOWN.includes(o.id) && byNode.has(o.entity)) labels.set(o.id, labelFor(byNode.get(o.entity), o.id));
     draw();
   }).catch(() => {});
 
@@ -82,7 +89,7 @@
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = 'rgba(2,7,2,.17)'; ctx.fillRect(b, 0, W - b, H);
     if (tracks) {
-      const fs = 10 * dpr, lh = fs * 1.45, pad = 7 * dpr, lead = 16 * dpr;
+      const fs = 9.5 * dpr, lh = fs * 1.45, pad = 6 * dpr, lead = 14 * dpr;
       ctx.font = `${fs}px ${mono}`; ctx.textBaseline = 'top';
       const placed = [];
       const hits = (x, y, w, h) => placed.some(q => x < q.x + q.w + 4 * dpr && q.x < x + w + 4 * dpr && y < q.y + q.h + 4 * dpr && q.y < y + h + 4 * dpr);
@@ -91,7 +98,7 @@
         if (!p) continue;
         const ax = f.dx + p[0] * f.dw, ay = f.dy + p[1] * f.dh;
         if (ax < -20 * dpr || ax > W + 20 * dpr || ay < -20 * dpr || ay > H + 20 * dpr) continue;
-        const bw = Math.max(...lines.map(l => ctx.measureText(l).width)) + pad * 2, bh = lines.length * lh + pad * 2 - (lh - fs);
+        const bw = Math.max(...lines.map(l => ctx.measureText(l.text).width)) + pad * 2, bh = lines.length * lh + pad * 2 - (lh - fs);
         // Box above the object; below it when there is no room above (for example the wall cabinet).
         const above = ay - lead - bh > 4 * dpr;
         let by = above ? ay - lead - bh : ay + lead;
@@ -105,7 +112,7 @@
         ctx.fillStyle = 'rgba(6,12,4,.8)'; ctx.beginPath();
         if (ctx.roundRect) ctx.roundRect(bx, by, bw, bh, 4 * dpr); else ctx.rect(bx, by, bw, bh);
         ctx.fill(); ctx.stroke();
-        lines.forEach((l, i) => { ctx.fillStyle = i === 0 ? '#b8f34a' : '#e6f5d8'; ctx.fillText(l, bx + pad, by + pad + i * lh); });
+        lines.forEach((l, i) => { ctx.fillStyle = l.kind === 'head' ? '#b8f34a' : l.kind === 'phys' ? '#8fd3ff' : '#e6f5d8'; ctx.fillText(l.text, bx + pad, by + pad + i * lh); });
       }
     }
     // A soft glow along the divider, where the surface peels back.
@@ -127,6 +134,7 @@
     requestAnimationFrame(loop);
   }
   poster.onload = size;
+  if (poster.complete) size(); // the poster may already be loaded from cache
   new ResizeObserver(size).observe(box);
   new IntersectionObserver(e => {
     visible = e[0].isIntersecting;

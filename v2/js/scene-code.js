@@ -4,8 +4,23 @@
 (() => {
   const NW = window.NW;
   let record;
-  NW.sceneRecord = () => record || (record = fetch('data/scene-01-record.json').then(r => {
-    if (!r.ok) throw new Error(`scene record (${r.status})`); return r.json();
+  // The construction record, with the example physical properties (data/scene-01-physics-example.json)
+  // attached per object: parts are grouped by the first material rule their name matches.
+  NW.sceneRecord = () => record || (record = Promise.all([
+    fetch('data/scene-01-record.json').then(r => { if (!r.ok) throw new Error(`scene record (${r.status})`); return r.json(); }),
+    fetch('data/scene-01-physics-example.json').then(r => r.ok ? r.json() : null).catch(() => null),
+  ]).then(([rec, phys]) => {
+    for (const e of rec.entities) {
+      const rules = phys?.objects?.[e.id];
+      if (!rules) continue;
+      const groups = rules.map(rule => ({ ...rule, re: new RegExp(rule.match, 'i'), nodes: [] }));
+      for (const p of e.parts) {
+        const g = groups.find(x => x.re.test(p.part));
+        if (g) { g.nodes.push(p.node); p.physics = g; }
+      }
+      e.physics = groups.filter(g => g.nodes.length);
+    }
+    return rec;
   }));
   // Up to 5 decimals (0.01 mm), so recorded values such as radius 0.01166 are shown unchanged.
   const num = v => {
@@ -25,6 +40,13 @@
     if (e.representation) lines.push({ kind: 'comment', text: `# representation: ${e.representation} · frame: scan world, z up, metres` });
     for (const [k, x] of Object.entries(e.notes || {})) lines.push({ kind: 'comment', text: `# ${k}: ${x}` });
     lines.push({ kind: 'code', text: `${v} = scene.object("${e.id}")` });
+    if (e.physics?.length) {
+      lines.push({ kind: 'comment', text: '# physical properties · example values for illustration' });
+      for (const g of e.physics) {
+        lines.push({ kind: 'phys', nodes: g.nodes, text: `${v}.physics("${g.material}", density=${g.density}, friction=${g.friction})  # ${g.nodes.length} part${g.nodes.length === 1 ? '' : 's'}` });
+      }
+      lines.push({ kind: 'comment', text: '# construction' });
+    }
     for (const p of e.parts) {
       if (p.op) {
         const args = Object.entries(p.params).map(([k, x]) => `${k}=${val(x)}`).join(', ');

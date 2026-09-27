@@ -234,10 +234,13 @@ input[type=range]{width:100%;accent-color:var(--accent-line)}
 .scene-code .code span{padding:1px 16px}
 .scene-code .code .comment{color:var(--muted)}
 .scene-code .code .op{color:var(--ink);cursor:default}
+.scene-code .code .phys{color:var(--sky);cursor:default}
+.scene-code .code .phys:hover{background:color-mix(in srgb,var(--sky) 10%,transparent)}
 .scene-code .code .mesh{color:var(--muted);font-style:italic;cursor:default}
 .scene-code .code .op:hover,.scene-code .code .mesh:hover{background:color-mix(in srgb,var(--accent-fill) 8%,transparent)}
 .scene-code-key{margin:0;padding:10px 16px;border-top:1px solid var(--line);font:400 11px/1.5 var(--mono);color:var(--muted)}
 .scene-code-key .k-op{color:var(--accent)}
+.scene-code-key .k-phys{color:var(--sky)}
 @media (max-width:900px){.scene-body.coding{grid-template-columns:minmax(0,1fr)}.scene-code{border-left:0;border-top:1px solid var(--line);height:420px}}
 #scene-stage{height:min(70vh,620px);cursor:crosshair}
 .part-tip{position:absolute;z-index:5;pointer-events:none;display:grid;gap:3px;max-width:240px;padding:10px 12px;border-radius:5px;background:var(--bg);border:1px solid var(--line);box-shadow:0 10px 30px #0006}
