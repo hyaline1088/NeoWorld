@@ -46,7 +46,8 @@ def build() -> None:
     v2 = SRC / "v2"
     (OUT / "v2").mkdir(parents=True)
     (OUT / "v2" / "index.html").write_text(strip_paper((v2 / "index.html").read_text(encoding="utf-8")), encoding="utf-8")
-    for path in [v2 / "v2.css", *sorted((v2 / "js").glob("*.js")), *sorted((v2 / "fonts").iterdir()), *sorted((v2 / "data").glob("*.json"))]:
+    for path in [v2 / "v2.css", *sorted((v2 / "js").glob("*.js")), *sorted((v2 / "fonts").iterdir()), *sorted((v2 / "data").glob("*.json")),
+                 *sorted((v2 / "media").rglob("*.webp"))]:
         copy(path, OUT / "v2" / path.relative_to(v2))
     for name in VENDOR:
         copy(SRC / "vendor" / name, OUT / "vendor" / name)

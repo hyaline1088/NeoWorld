@@ -21,6 +21,7 @@
   <script defer src="js/kit.js"></script>
   <script defer src="js/scene-code.js"></script>
   <script defer src="js/hero.js"></script>
+  <script defer src="js/method.js"></script>
   <script defer src="js/anatomy.js"></script>
   <script defer src="js/refine.js"></script>
   <script defer src="js/compare.js"></script>
@@ -29,11 +30,11 @@
   <script defer src="js/main.js"></script>
 </head>
 <body>
-  <a class="skip" href="#program">Skip to the article</a>
+  <a class="skip" href="#method">Skip to the article</a>
   <!-- Paper-derived blocks sit between paper:start / paper:end. scripts/build-v2-public.py deletes them
        and unwraps the <template data-public> that follows each one, so the public build never contains them. -->
   <!-- paper:start -->
-  <div class="draft" role="note">LOCAL DRAFT · Parts of chapter 02 use a paper draft under double-blind review. Clear them with the team before publishing.</div>
+  <div class="draft" role="note">LOCAL DRAFT · Parts of chapter 03 use a paper draft under double-blind review. Clear them with the team before publishing.</div>
   <!-- paper:end --><template data-public><div class="draft" role="note">DESIGN PREVIEW · Not the official NeoWorld site. Sections based on unpublished results are left out.</div></template>
   <div class="progress" aria-hidden="true"><i></i></div>
 
@@ -41,7 +42,7 @@
     <div class="wrap">
       <a class="brand" href="#top"><img src="../brand/neoworld-nw-small.svg" alt="">NeoWorld<sup>3</sup></a>
       <nav aria-label="Main">
-        <a href="#program">World as code</a><a href="#refine-ch">Refinement</a><a href="#scene">Scene</a><a href="#objects">Objects</a>
+        <a href="#method">Method</a><a href="#program">World as code</a><a href="#refine-ch">Refinement</a><a href="#scene">Scene</a><a href="#objects">Objects</a>
       </nav>
       <button class="tbtn" id="theme-toggle" type="button"><span>Light</span></button>
       <a class="tbtn" href="https://neoworldproject.github.io/Studio/?lang=en" target="_blank" rel="noopener">Studio ↗</a>
@@ -49,7 +50,7 @@
   </header>
 
   <nav class="toc" aria-label="Chapters">
-    <a href="#program"><b>01</b>A world as code</a><a href="#refine-ch"><b>02</b>Refinement</a><a href="#scene"><b>03</b>Scene</a><a href="#objects"><b>04</b>Objects</a>
+    <a href="#method"><b>01</b>The method</a><a href="#program"><b>02</b>A world as code</a><a href="#refine-ch"><b>03</b>Refinement</a><a href="#scene"><b>04</b>Scene</a><a href="#objects"><b>05</b>Objects</a>
   </nav>
 
   <main id="top">
@@ -60,7 +61,7 @@
           <p class="label">NeoWorld-3 · research</p>
           <h1 id="hero-title">Worlds robots can <em>use</em>, not just look at.</h1>
           <p class="lede">NeoWorld-3 turns photos into <b>simulation-ready 3D worlds</b>. Coding agents write every object as a program, with parts, joints and limits.</p>
-          <div class="cta"><a class="btn primary" href="#program">Start reading ↓</a><a class="btn" href="#scene">Explore the kitchen</a></div>
+          <div class="cta"><a class="btn primary" href="#method">Start reading ↓</a><a class="btn" href="#scene">Explore the kitchen</a></div>
         </div>
       </div>
       <p class="hero-note">Scene 01 · reconstructed coffee corner<br>move the pointer · scroll to turn</p>
@@ -68,8 +69,94 @@
 
     <div class="wrap">
       <!-- 01 -->
+      <section class="chapter" id="method" aria-labelledby="method-h">
+        <div class="chapter-head"><span class="num">01</span><p class="label">The method</p><h2 id="method-h">How NeoWorld-3 builds a world.</h2></div>
+        <div class="prose"><p>One figure, taken apart step by step. Keep scrolling: the figure zooms to each stage as you read about it, and the last step plays a real example.</p></div>
+        <div class="method">
+          <div class="method-steps">
+            <div class="mstep" data-step="0"><p class="label">1 · Real observations</p><h3>Start from what a camera sees.</h3><p>A handful of RGB-D photos of a real place, each with its camera position. Here: an office coffee corner.</p></div>
+            <div class="mstep" data-step="1"><p class="label">2 · Scene agent</p><h3>One agent owns the whole scene.</h3><p>It looks at the photos, measures what it needs, and writes the scene as a program: boxes, cylinders and where they go. Then it keeps revising that program.</p></div>
+            <div class="mstep" data-step="2"><p class="label">3 · NeoMCP + NeoSDK</p><h3>Tools to build, measure and refine.</h3><p>NeoMCP gives the agent its tools: read, edit, measure, refine. NeoSDK does the geometry. Many candidate fits are tried in a fast GPU copy of the program, and a strict harness decides what is kept.</p></div>
+            <div class="mstep" data-step="3"><p class="label">4 · Object handoff</p><h3>Hard objects get a specialist.</h3><p>An object that needs more care, like the coffee machine, is handed over with its own evidence: the views that see it, its current source, and the objects around it.</p></div>
+            <div class="mstep" data-step="4"><p class="label">5 · Object specialists</p><h3>Write, fit, compare, repeat.</h3><p>The specialist writes a fresh program for that one object, fits it to the photos, and compares real and rendered views from the same cameras. If they disagree, it revises the code or refits the numbers. Cameras and neighbours stay fixed.</p></div>
+            <div class="mstep" data-step="5"><p class="label">6 · Parent integration</p><h3>Kept only if it is better.</h3><p>The returned object is tried in a copy of the scene and checked: geometry, who owns what, and whether it really improves the match. If not, the scene stays as it was.</p></div>
+            <div class="mstep" data-step="6"><p class="label">7 · Real–sim scene</p><h3>An editable scene that matches the photo.</h3><p>The result is rendered from the same camera as the real photo. Whatever still differs goes back to the scene agent for another round.</p></div>
+            <div class="mstep" data-step="7"><p class="label">8 · Articulation</p><h3>Parts that move get joints.</h3><p>Joints are declared in the code, swept through their range to catch collisions, and exported as URDF. Axes and limits the photos cannot confirm stay marked as unresolved.</p></div>
+            <div class="mstep" data-step="8"><p class="label">The whole loop</p><h3>From photos to a world a robot can use.</h3><p>Observe, build, check, refine, and hand the result to a robot, with feedback at every stage.</p></div>
+            <div class="mstep mstep-finale" data-step="9"><p class="label">A real example</p><h3>Scan it. Rehearse it. Do it.</h3><p>A phone scans a desk. A policy rehearses the task in the rebuilt twin: put the bowl in the microwave. Then the real robot does the same. Keep scrolling to move through the recording.</p></div>
+          </div>
+          <div class="method-stage-wrap">
+            <div class="mstage" aria-label="The NeoWorld-3 method figure, focused on the current step">
+              <div class="mboard">
+                <div class="mgroup g-recon"><h4><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm8 3.5 2-1.5-2-3.5-2.4.6a7 7 0 0 0-1.6-1l-.4-2.6h-4l-.4 2.6a7 7 0 0 0-1.6 1L5 7 3 10.5 5 12l-2 1.5L5 17l2.4-.6a7 7 0 0 0 1.6 1l.4 2.6h4l.4-2.6a7 7 0 0 0 1.6-1L17 17l2-3.5Z"/></svg>Real-to-sim reconstruction</h4></div>
+                <div class="mgroup g-spec" data-block="spec"><h4>Optional object specialists</h4><span class="mnote">Bounded object episodes</span></div>
+                <div class="mgroup g-artic" data-block="artic">
+                  <h4><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 7v10l-9 5-9-5V7l9-5Zm0 2.3L5 8.2v7.6l7 3.9 7-3.9V8.2l-7-3.9Zm0 3.2 4.5 2.5L12 12.5 7.5 10 12 7.5Z"/></svg>Optional articulation</h4>
+                  <div class="msteps3"><span>Declared bodies / joints</span><i>→</i><span>Geometric sweep</span><i>→</i><span>Visual URDF + playback</span></div>
+                  <p class="mcap">Declared motion only; unresolved axes and limits remain explicit.</p>
+                </div>
+
+                <div class="mb b-obs" data-block="obs"><h4>Real observations</h4>
+                  <div class="mimgs"><img src="media/method/obs-stools.webp" alt="Real photo: stools and microwave"><img src="media/method/obs-sink.webp" alt="Real photo: sink and coffee machine"></div>
+                  <p>Multi-view RGB-D + cameras</p></div>
+                <div class="mb b-agent" data-block="agent"><h4>Scene agent</h4>
+                  <svg class="micon" viewBox="0 0 64 48" aria-hidden="true"><circle cx="32" cy="5" r="3.5"/><path d="M32 9v5"/><rect x="14" y="14" width="36" height="26" rx="8"/><circle cx="25" cy="27" r="3.5" class="fill"/><circle cx="39" cy="27" r="3.5" class="fill"/><path d="M10 22v10M54 22v10"/></svg>
+                  <p>Observe, measure, author<br>Revise the scene program</p></div>
+                <div class="mb b-mcp" data-block="mcp"><h4>NeoMCP + NeoSDK</h4>
+                  <div class="mrow"><pre class="mcode"><span>cube()</span><span>translate()</span><span>rotate()</span></pre>
+                    <div class="mlist"><b>Read / edit / measure / refine</b><span>Tensor-twin parameter search</span><span>Blender materialization &amp; checks</span></div></div>
+                  <p class="mleft">Harness: evidence, budgets and admission</p></div>
+                <div class="mb b-realsim" data-block="realsim"><h4>Real–Sim scene</h4>
+                  <div class="mpair"><figure><figcaption>Real</figcaption><img src="media/method/obs-sink.webp" alt="Real photo of the sink corner"></figure><figure><figcaption class="sim">Sim</figcaption><img src="media/method/scene-sim.webp" alt="Reconstructed sink corner"></figure></div>
+                  <p>Editable reconstructed scene</p></div>
+                <div class="mb b-handoff" data-block="handoff"><h4>Object handoff</h4>
+                  <div class="mhand"><img class="crop-coffee" src="media/method/coffee-real.webp" alt="Coffee machine photo"><svg class="micon cam" viewBox="0 0 90 40" aria-hidden="true"><rect x="2" y="10" width="26" height="20" rx="4"/><circle cx="15" cy="20" r="5"/><path d="M34 16h6v8h-6zM40 20 86 4v32Z" class="ray"/></svg></div>
+                  <div class="mhand"><img class="crop-coffee" src="media/method/coffee-sim.webp" alt="Coffee machine render"><p class="mleft">Views<br>Source<br>Context</p></div>
+                  <p>Bound object evidence<br>Fixed cameras + neighbors</p></div>
+                <div class="mb b-author" data-block="author"><h4>Author / revise program</h4>
+                  <svg class="micon parts" viewBox="0 0 120 80" aria-hidden="true"><path d="M60 22 30 52M60 22v30M60 22l30 30"/><path d="M60 4l12 7v12l-12 7-12-7V11Z" class="c1"/><path d="M30 46l10 6v10l-10 6-10-6V52Z" class="c2"/><path d="M60 48l9 5v9l-9 5-9-5v-9Z" class="c3"/><path d="M90 46l11 6v11l-11 6-11-6V52Z" class="c1"/></svg>
+                  <p>Editable source + parts</p></div>
+                <div class="mb b-refine" data-block="refine"><h4>Refine object geometry</h4>
+                  <div class="mpair"><figure><figcaption>Real</figcaption><img class="crop-coffee" src="media/method/coffee-real.webp" alt="Coffee machine photo"></figure><figure><figcaption class="sim">Sim</figcaption><img class="crop-coffee" src="media/method/coffee-sim.webp" alt="Coffee machine reconstruction"></figure></div>
+                  <p>Fit against bound observations</p></div>
+                <div class="mb b-feedback" data-block="feedback"><h4>Real–Sim feedback</h4>
+                  <div class="mpair"><figure><figcaption>Real</figcaption><img class="crop-stools" src="media/method/stools-real.webp" alt="Stools photo"></figure><figure><figcaption class="sim">Sim</figcaption><img class="crop-stools" src="media/method/stools-sim.webp" alt="Stools reconstruction"></figure></div>
+                  <p>Compare at matched cameras</p></div>
+                <div class="mb b-parent" data-block="parent"><h4>Parent integration</h4>
+                  <svg class="micon" viewBox="0 0 120 56" aria-hidden="true"><rect x="16" y="4" width="30" height="46" rx="4"/><path d="M24 16h2M30 16h10M24 27h2M30 27h10M24 38h2M30 38h10"/><path d="M88 6l22 11-22 11-22-11Z M66 25l22 11 22-11 M66 33l22 11 22-11"/></svg>
+                  <p>Stage returned source<br>Check geometry and ownership<br>Retain or reject</p></div>
+                <div class="mb b-robot" data-block="robot"><img src="media/method/robot-scene.webp" alt="A robot placed in the reconstructed scene"><div><h4>Robot in reconstructed scene</h4><p class="mleft">Static placement visualization</p></div></div>
+                <p class="mworker">Each worker edits its assigned object. Cameras and neighboring objects stay fixed.</p>
+
+                <svg class="marrows" viewBox="0 0 1690 1127" aria-hidden="true">
+                  <defs><marker id="mhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z"/></marker></defs>
+                  <path class="ma" data-arrow="a-obs" d="M295 272H350"/>
+                  <path class="ma" data-arrow="a-handoff" d="M490 413V451H160V500"/>
+                  <path class="ma" data-arrow="a-spec" d="M295 678H364"/>
+                  <path class="ma" data-arrow="a-ar" d="M650 678H670"/>
+                  <path class="ma" data-arrow="a-rf" d="M967 678H986"/>
+                  <path class="ma" data-arrow="a-parent" d="M1275 678H1341"/>
+                  <path class="ma" data-arrow="a-realsim" d="M1494 542V446"/>
+                  <path class="md" data-arrow="d-refit" d="M1133 792V860H510V796"/>
+                  <text class="mlabel md-t" x="820" y="885" text-anchor="middle">Compare views; revise source or refit</text>
+                  <path class="md" data-arrow="d-matched" d="M1494 145V45H490V167"/>
+                  <text class="mlabel md-t" x="1020" y="34" text-anchor="middle">Matched-view feedback guides scene revision</text>
+                  <path class="mg" data-arrow="d-artic" d="M1642 295H1682V890H137V902"/>
+                </svg>
+              </div>
+              <div class="mfinale" aria-label="Real example: scanning, twin policy and real robot action">
+                <canvas></canvas>
+                <button class="btn mfinale-play" type="button">Play at real speed</button>
+              </div>
+              <span class="mstage-count">01 / 10</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 -->
       <section class="chapter" id="program" aria-labelledby="program-h">
-        <div class="chapter-head"><span class="num">01</span><p class="label">A world written as code</p><h2 id="program-h">Keep the recipe, not just the cake.</h2></div>
+        <div class="chapter-head"><span class="num">02</span><p class="label">A world written as code</p><h2 id="program-h">Keep the recipe, not just the cake.</h2></div>
         <div class="prose">
           <p>Most 3D methods predict a finished surface in one step. NeoWorld-3 keeps something more useful: the program that builds the object. Change one number in it and every part that depends on that number follows.</p>
           <div class="equation" aria-label="P equals S, theta, T">
@@ -99,9 +186,9 @@
         </div>
       </section>
 
-      <!-- 02 -->
+      <!-- 03 -->
       <section class="chapter" id="refine-ch" aria-labelledby="refine-h">
-        <div class="chapter-head"><span class="num">02</span><p class="label">Reasoning meets gradients</p><h2 id="refine-h">The agent sketches. The optimiser measures.</h2></div>
+        <div class="chapter-head"><span class="num">03</span><p class="label">Reasoning meets gradients</p><h2 id="refine-h">The agent sketches. The optimiser measures.</h2></div>
         <div class="prose">
           <p>Language models are good at structure (“a chair with four legs and a tilted back”) but poor at exact numbers. So NeoWorld-3 splits the work. The agent writes the program; an optimiser then tunes its named knobs until renders match the photos.</p>
           <!-- paper:start -->
@@ -126,9 +213,9 @@
         </div>
       </section>
 
-      <!-- 03 -->
+      <!-- 04 -->
       <section class="chapter" id="scene" aria-labelledby="scene-h">
-        <div class="chapter-head"><span class="num">03</span><p class="label">From capture to scene</p><h2 id="scene-h">A coffee corner, rebuilt part by part.</h2></div>
+        <div class="chapter-head"><span class="num">04</span><p class="label">From capture to scene</p><h2 id="scene-h">A coffee corner, rebuilt part by part.</h2></div>
         <div class="compare-wrap">
           <div id="compare" aria-label="Drag the two dividers to compare the capture, the reconstruction and its code">
             <canvas></canvas>
@@ -162,9 +249,9 @@
         </div>
       </section>
 
-      <!-- 04 -->
+      <!-- 05 -->
       <section class="chapter" id="objects" aria-labelledby="objects-h">
-        <div class="chapter-head"><span class="num">04</span><p class="label">Articulated objects</p><h2 id="objects-h">Ten objects. Every joint explicit.</h2></div>
+        <div class="chapter-head"><span class="num">05</span><p class="label">Articulated objects</p><h2 id="objects-h">Ten objects. Every joint explicit.</h2></div>
         <div class="prose"><p>Each object below was rebuilt from a single image, shown on the left. Every moving part has a declared joint type, axis and range. Play the motion, colour the parts, or show the joint axes.</p></div>
         <div class="plate">
           <div class="picker" id="gallery-picker" aria-label="Choose an object"></div>
