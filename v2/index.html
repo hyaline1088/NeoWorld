@@ -25,6 +25,7 @@
   <script defer src="js/refine.js"></script>
   <script defer src="js/compare.js"></script>
   <script defer src="js/scene.js"></script>
+  <script defer src="js/gallery.js"></script>
   <script defer src="js/main.js"></script>
 </head>
 <body>
@@ -36,7 +37,7 @@
     <div class="wrap">
       <a class="brand" href="#top"><img src="../brand/neoworld-nw-small.svg" alt="">NeoWorld<sup>3</sup></a>
       <nav aria-label="Main">
-        <a href="#program">World as code</a><a href="#refine-ch">Refinement</a><a href="#scene">Scene</a>
+        <a href="#program">World as code</a><a href="#refine-ch">Refinement</a><a href="#scene">Scene</a><a href="#objects">Objects</a>
       </nav>
       <button class="tbtn" id="theme-toggle" type="button"><span>Light</span></button>
       <a class="tbtn" href="https://neoworldproject.github.io/Studio/?lang=en" target="_blank" rel="noopener">Studio ↗</a>
@@ -44,7 +45,7 @@
   </header>
 
   <nav class="toc" aria-label="Chapters">
-    <a href="#program"><b>01</b>A world as code</a><a href="#refine-ch"><b>02</b>Refinement</a><a href="#scene"><b>03</b>Scene</a>
+    <a href="#program"><b>01</b>A world as code</a><a href="#refine-ch"><b>02</b>Refinement</a><a href="#scene"><b>03</b>Scene</a><a href="#objects"><b>04</b>Objects</a>
   </nav>
 
   <main id="top">
@@ -150,6 +151,30 @@
             </aside>
           </div>
           <div class="chips" id="scene-legend" aria-label="Objects in the scene: click to isolate one"></div>
+        </div>
+      </section>
+
+      <!-- 04 -->
+      <section class="chapter" id="objects" aria-labelledby="objects-h">
+        <div class="chapter-head"><span class="num">04</span><p class="label">Articulated objects</p><h2 id="objects-h">Ten objects. Every joint explicit.</h2></div>
+        <div class="prose"><p>Each object below was rebuilt from a single image, shown on the left. Every moving part has a declared joint type, axis and range. Play the motion, colour the parts, or show the joint axes.</p></div>
+        <div class="plate">
+          <div class="picker" id="gallery-picker" aria-label="Choose an object"></div>
+          <div class="gallery">
+            <figure><img id="gallery-ref" alt="" src="../assets/batch5_collision_references_image3/10449_image_3.png"><figcaption id="gallery-ref-cap">Source image</figcaption></figure>
+            <div class="stage" id="gallery-stage"><span class="stage-status">Loading…</span><span class="hint">drag to turn · scroll to zoom</span></div>
+            <div class="gallery-side">
+              <h3 id="gallery-title">Scissors · 10449</h3>
+              <p class="sub" id="gallery-summary">&nbsp;</p>
+              <div class="side-actions">
+                <button class="btn primary" id="gallery-play" type="button" aria-pressed="false">Play motion</button>
+                <span class="seg" role="group" aria-label="Look"><button type="button" data-gallery-look="skin" aria-pressed="true">Surface</button><button type="button" data-gallery-look="parts" aria-pressed="false">Parts</button><button type="button" data-gallery-look="wire" aria-pressed="false">Wire</button></span>
+                <button class="btn" id="gallery-axes" type="button" aria-pressed="false">Joint axes</button>
+              </div>
+              <div id="gallery-joints"></div>
+            </div>
+          </div>
+          <p class="plate-foot">Kinematic viewer: joints move within their URDF limits. It shows motion, not a physics simulation.</p>
         </div>
       </section>
 
