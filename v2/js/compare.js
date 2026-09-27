@@ -1,6 +1,7 @@
 /* Capture | reconstruction | code. The source video holds capture and reconstruction side by side under a
    thin label bar; one canvas draws the capture half, the reconstruction half from the first divider, and from
-   the second divider the reconstruction, slightly darkened, with the scene's real code floating over it. */
+   the second divider the reconstruction, slightly darkened, with each object's code pinned above it.
+   Object positions come from data/scene-01-tracks.json (optical-flow tracks through the video). */
 (() => {
   const box = document.querySelector('#compare');
   if (!box) return;
@@ -16,61 +17,45 @@
   const poster = new Image(); poster.src = `${NW.ASSETS}studio/posters/scene-01.jpg`;
   const BAR = 32 / 1472; // label bar height as a fraction of the frame
   const MIN_GAP = .06;
-  let split = [.34, .68], source = poster, loaded = false, visible = false, last = 0;
+  const SHOWN = ['microwave', 'stool_left', 'stool_right', 'hanging_cabinet', 'floor_cabinet', 'coffee_machine'];
+  let split = [.34, .68], source = poster, loaded = false, visible = false;
 
-  /* The code layer lies under the whole picture; the second divider only reveals it.
-     Floating fragments are real lines from the scene's construction record, and the rain is built
-     from characters of those same lines. */
-  let fragLines = [], glyphs = '', frags = [], rain = [];
-  const rand = (a, b) => a + Math.random() * (b - a);
-  const pickLine = () => fragLines[Math.floor(Math.random() * fragLines.length)] || ['', ''];
-  // Short two-line fragments: object and recorded operation, then the part and one real measurement.
+  /* Labels: the object's name line and its two largest parts, written as code from the construction record. */
+  let tracks = null, labels = new Map();
   const KEY = ['radius', 'depth', 'thickness', 'length', 'dimensions', 'bevel'];
-  const short = v => Array.isArray(v) ? `(${v.map(short).join(', ')})` : typeof v === 'number' ? String(Math.round(v * 1e5) / 1e5) : `"${v}"`;
-  function fragmentsFrom(rec) {
-    const out = [];
-    for (const e of rec.entities) {
-      if (e.node === 'Background') continue;
-      const name = NW.pretty(e.id).replace(/\s+/g, '_').toLowerCase();
-      out.push([`${name} =`, `  scene.object("${e.id}")`]);
-      for (const p of e.parts) {
-        if (!p.op) continue;
-        const key = KEY.find(k => k in p.params);
-        out.push([`${name}.${p.op}(`, `  "${p.part}"${key ? `, ${key}=${short(p.params[key])}` : ''})`]);
-      }
-    }
-    return out.filter(([a, b]) => Math.max(a.length, b.length) <= 46);
+  const short = v => Array.isArray(v) ? `(${v.map(short).join(', ')})` : typeof v === 'number' ? String(Math.round(v * 1e4) / 1e4) : `"${v}"`;
+  const clip = (s, n) => s.length > n ? s.slice(0, n - 1) + '…' : s;
+  const volume = p => (p.size || [0, 0, 0]).reduce((a, b) => a * b, 1);
+  function labelFor(e) {
+    const name = NW.pretty(e.id).replace(/\s+/g, '_').toLowerCase();
+    const parts = [...e.parts].sort((a, b) => (!!b.op - !!a.op) || volume(b) - volume(a)).slice(0, 2);
+    return [
+      clip(`${name} = scene.object(`, 34),
+      ...parts.map(p => clip(p.op
+        ? `  .${p.op}("${p.part}"${(k => k ? `, ${k}=${short(p.params[k])}` : '')(KEY.find(k => k in p.params))})`
+        : `  .mesh("${p.part}")`, 34)),
+    ];
   }
-  function spawn(f, fresh) {
-    f.text = pickLine(); f.depth = Math.random() ** 1.4; // most fragments sit far away, a few come close
-    // Most new fragments appear where the code layer is showing; some anywhere, ready to be uncovered.
-    // Lines start inside the layer and may run off the right edge, like text continuing out of frame.
-    const inside = !fresh && Math.random() < .8;
-    f.x = inside ? rand(split[1] + .015, Math.max(split[1] + .03, .8)) : rand(-.05, .8);
-    f.y = fresh ? rand(0, 1.05) : rand(1.02, 1.15);
-    f.vy = rand(.018, .04) * (.55 + f.depth); f.vx = rand(-.004, .004);
-    f.life = rand(7, 13); f.age = fresh ? rand(0, f.life * .8) : 0;
-    return f;
-  }
-  function seedRain() {
-    const dpr = canvas.width / Math.max(box.clientWidth, 1), col = 14 * dpr, H = canvas.height;
-    rain = Array.from({ length: Math.ceil(canvas.width / col) }, (_, i) => ({
-      x: i * col, y: rand(-H, H), speed: rand(60, 170) * dpr, len: Math.floor(rand(8, 22)),
-      chars: Array.from({ length: 22 }, () => glyphs[Math.floor(Math.random() * glyphs.length)] || '0'),
-    }));
-  }
-  NW.sceneRecord().then(rec => {
-    fragLines = fragmentsFrom(rec);
-    glyphs = fragLines.flat().join('').replace(/\s+/g, '');
-    // Start with most fragments already inside the default code layer, a few elsewhere to be uncovered.
-    frags = Array.from({ length: 15 }, (_, i) => { const f = spawn({}, true); if (i % 3) f.x = rand(split[1] + .015, .8); return f; });
-    seedRain(); draw();
+  Promise.all([NW.sceneRecord(), fetch('data/scene-01-tracks.json').then(r => r.json())]).then(([rec, tr]) => {
+    const byNode = new Map(rec.entities.map(e => [e.node, e]));
+    tracks = tr;
+    for (const o of tr.objects) if (SHOWN.includes(o.id) && byNode.has(o.entity)) labels.set(o.id, labelFor(byNode.get(o.entity)));
+    draw();
   }).catch(() => {});
+
+  /* Where an object's anchor is at the current video time (normalized to the reconstruction half). */
+  function anchorAt(o) {
+    const t = source === video ? video.currentTime : 0;
+    const k = Math.min(t * tracks.fps / tracks.step, o.anchor.length - 1), i = Math.floor(k), w = k - i;
+    const a = o.anchor[i], b = o.anchor[Math.min(i + 1, o.anchor.length - 1)];
+    if (!a) return null;
+    return b ? [a[0] + (b[0] - a[0]) * w, a[1] + (b[1] - a[1]) * w] : a;
+  }
 
   function size() {
     const w = box.clientWidth, dpr = Math.min(devicePixelRatio, 2);
     canvas.width = Math.round(w * dpr); canvas.height = Math.round(w * 1.25 * dpr);
-    canvas.style.height = `${canvas.height / dpr}px`; if (glyphs) seedRain(); layoutTags(); draw();
+    canvas.style.height = `${canvas.height / dpr}px`; layoutTags(); draw();
   }
   function frameRect() {
     const sw = (source.videoWidth || source.naturalWidth) / 2, sh = source.videoHeight || source.naturalHeight;
@@ -88,77 +73,56 @@
     const half = side => ctx.drawImage(source, side * f.sw, f.top, f.sw, f.h, f.dx, f.dy, f.dw, f.dh);
     region(0, a, () => half(0));
     region(a, b, () => half(1));
-    if (b < W) region(b, W, () => { half(1); drawCode(b, W, H); });
+    if (b < W) region(b, W, () => { half(1); drawCode(f, b, W, H); });
   }
-  function drawCode(b, W, H) {
+  function drawCode(f, b, W, H) {
     const dpr = W / Math.max(box.clientWidth, 1), mono = '"JetBrains Mono", Consolas, monospace';
-    // The reconstruction stays visible: a slight darkening with a green cast.
-    // About 75% of the original brightness, with a faint green cast.
+    // The reconstruction stays visible: about 75% of its brightness, with a faint green cast.
     ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = 'rgb(222,242,212)'; ctx.fillRect(b, 0, W - b, H);
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = 'rgba(2,7,2,.17)'; ctx.fillRect(b, 0, W - b, H);
-    // Rain: faint falling columns of characters taken from the code.
-    const lh = 14 * dpr; ctx.font = `${12 * dpr}px ${mono}`; ctx.textBaseline = 'top';
-    for (const c of rain) {
-      if (c.x < b - lh || c.x > W) continue;
-      for (let k = 0; k < c.len; k++) {
-        const y = c.y - k * lh; if (y < -lh || y > H) continue;
-        ctx.fillStyle = `rgba(170,240,95,${((k === 0 ? .55 : .3) * (1 - k / c.len)).toFixed(3)})`;
-        ctx.fillText(c.chars[k % c.chars.length], c.x + 2 * dpr, y);
+    if (tracks) {
+      const fs = 10 * dpr, lh = fs * 1.45, pad = 7 * dpr, lead = 16 * dpr;
+      ctx.font = `${fs}px ${mono}`; ctx.textBaseline = 'top';
+      const placed = [];
+      const hits = (x, y, w, h) => placed.some(q => x < q.x + q.w + 4 * dpr && q.x < x + w + 4 * dpr && y < q.y + q.h + 4 * dpr && q.y < y + h + 4 * dpr);
+      for (const o of tracks.objects) {
+        const lines = labels.get(o.id), p = lines && anchorAt(o);
+        if (!p) continue;
+        const ax = f.dx + p[0] * f.dw, ay = f.dy + p[1] * f.dh;
+        if (ax < -20 * dpr || ax > W + 20 * dpr || ay < -20 * dpr || ay > H + 20 * dpr) continue;
+        const bw = Math.max(...lines.map(l => ctx.measureText(l).width)) + pad * 2, bh = lines.length * lh + pad * 2 - (lh - fs);
+        // Box above the object; below it when there is no room above (for example the wall cabinet).
+        const above = ay - lead - bh > 4 * dpr;
+        let by = above ? ay - lead - bh : ay + lead;
+        const bx = Math.min(Math.max(ax - bw / 2, 4 * dpr), W - bw - 4 * dpr);
+        // If it would cover another label, move it further away from its object until it is clear.
+        for (let n = 0; n < 12 && hits(bx, by, bw, bh); n++) by += above ? -(bh * .5) : bh * .5;
+        placed.push({ x: bx, y: by, w: bw, h: bh });
+        ctx.strokeStyle = 'rgba(184,243,74,.9)'; ctx.lineWidth = 1.2 * dpr;
+        ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax, above ? by + bh : by); ctx.stroke();
+        ctx.fillStyle = '#b8f34a'; ctx.beginPath(); ctx.arc(ax, ay, 3 * dpr, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(6,12,4,.8)'; ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(bx, by, bw, bh, 4 * dpr); else ctx.rect(bx, by, bw, bh);
+        ctx.fill(); ctx.stroke();
+        lines.forEach((l, i) => { ctx.fillStyle = i === 0 ? '#b8f34a' : '#e6f5d8'; ctx.fillText(l, bx + pad, by + pad + i * lh); });
       }
-    }
-    // Floating fragments: real lines of the construction record, drifting upward at different depths.
-    for (const f of [...frags].sort((p, q) => p.depth - q.depth)) {
-      const fs = (8 + f.depth * 3.5) * dpr, y = f.y * H;
-      let x = f.x * W;
-      const t = f.age / f.life, fade = Math.min(1, t / .18, (1 - t) / .25);
-      const alpha = Math.max(0, fade) * (.35 + f.depth * .65);
-      if (alpha <= .01 || x > W || y < -fs || y > H) continue;
-      ctx.font = `${fs}px ${mono}`;
-      const [head, tail] = f.text, lh2 = fs * 1.35;
-      const wAll = Math.max(ctx.measureText(head).width, ctx.measureText(tail).width);
-      // Fragments inside the layer stay within the picture; ones behind the reconstruction wait to be uncovered.
-      if (x + wAll > W - 8 * dpr && x >= b) x = Math.max(b + 8 * dpr, W - wAll - 8 * dpr);
-      if (x + wAll < b) continue;
-      ctx.fillStyle = `rgba(4,10,3,${(.32 * alpha).toFixed(3)})`;
-      ctx.beginPath();
-      if (ctx.roundRect) ctx.roundRect(x - 6 * dpr, y - 4 * dpr, wAll + 12 * dpr, lh2 + fs + 8 * dpr, 3 * dpr);
-      else ctx.rect(x - 6 * dpr, y - 4 * dpr, wAll + 12 * dpr, lh2 + fs + 8 * dpr);
-      ctx.fill();
-      ctx.shadowColor = 'rgba(184,243,74,.9)'; ctx.shadowBlur = (3 + 9 * f.depth) * dpr;
-      ctx.fillStyle = `rgba(184,243,74,${alpha.toFixed(3)})`; ctx.fillText(head, x, y);
-      ctx.fillStyle = `rgba(233,255,214,${(alpha * .92).toFixed(3)})`; ctx.fillText(tail, x, y + lh2);
-      ctx.shadowBlur = 0;
     }
     // A soft glow along the divider, where the surface peels back.
     const g = ctx.createLinearGradient(b, 0, b + 22 * dpr, 0);
     g.addColorStop(0, 'rgba(184,243,74,.16)'); g.addColorStop(1, 'rgba(184,243,74,0)');
     ctx.fillStyle = g; ctx.fillRect(b, 0, 22 * dpr, H);
   }
-  function step(dt) {
-    for (const f of frags) {
-      f.age += dt; f.y -= f.vy * dt; f.x += f.vx * dt;
-      if (f.age > f.life || f.y < -.06) spawn(f, false);
-    }
-    const H = canvas.height;
-    for (const c of rain) {
-      c.y += c.speed * dt;
-      if (c.y - c.len * 14 * (canvas.width / Math.max(box.clientWidth, 1)) > H) c.y = rand(-H * .6, 0);
-      if (Math.random() < dt * 3) c.chars[Math.floor(Math.random() * c.chars.length)] = glyphs[Math.floor(Math.random() * glyphs.length)] || '0';
-    }
-  }
-  // The code layer keeps moving even when the video is paused; everything stops for reduced motion.
-  function loop(now) {
+  // Labels follow their objects while the video plays; a paused frame is redrawn only when something changes.
+  function loop() {
     requestAnimationFrame(loop);
-    const dt = Math.min((now - last) / 1000, .1); last = now;
-    if (!visible || NW.reduced.matches) return;
-    if (frags.length && split[1] < .995) step(dt);
-    draw();
+    if (visible && !video.paused) draw();
   }
   function start() {
     if (loaded) return; loaded = true;
     video.src = `${NW.ASSETS}studio/videos/scene-01.mp4`;
     video.addEventListener('loadeddata', () => { source = video; draw(); }, { once: true });
+    video.addEventListener('seeked', draw);
     if (!NW.reduced.matches) video.play().then(() => { play.textContent = 'Pause'; }).catch(() => {});
     requestAnimationFrame(loop);
   }
@@ -181,7 +145,7 @@
     handles.forEach((h, k) => { h.style.left = `${split[k] * 100}%`; h.setAttribute('aria-valuenow', Math.round(split[k] * 100)); });
     layoutTags(); draw();
   }
-  // Each label sits at the start of its layer and hides when the layer is too narrow for it.
+  // Each layer name sits at the start of its layer and hides when the layer is too narrow for it.
   function layoutTags() {
     const edges = [0, ...split, 1];
     tags.forEach((t, k) => {
@@ -204,4 +168,5 @@
   }));
   document.fonts?.ready.then(() => { setSplit(0, split[0]); setSplit(1, split[1]); });
   setSplit(0, split[0]); setSplit(1, split[1]);
+  (NW.debug = NW.debug || {}).compare = { video, draw, setSplit }; // for browser checks
 })();
