@@ -22,6 +22,8 @@
   <script defer src="js/scene-code.js"></script>
   <script defer src="js/hero.js"></script>
   <script defer src="js/method.js"></script>
+  <script defer src="js/twin.js"></script>
+  <script defer src="js/agentwork.js"></script>
   <script defer src="js/anatomy.js"></script>
   <script defer src="js/refine.js"></script>
   <script defer src="js/compare.js"></script>
@@ -30,7 +32,7 @@
   <script defer src="js/main.js"></script>
 </head>
 <body>
-  <a class="skip" href="#method">Skip to the article</a>
+  <a class="skip" href="#capture">Skip to the article</a>
 <div class="draft" role="note">DESIGN PREVIEW · Not the official NeoWorld site. Sections based on unpublished results are left out.</div>
   <div class="progress" aria-hidden="true"><i></i></div>
 
@@ -38,7 +40,7 @@
     <div class="wrap">
       <a class="brand" href="#top"><img src="../brand/neoworld-nw-small.svg" alt="">NeoWorld<sup>3</sup></a>
       <nav aria-label="Main">
-        <a href="#method">Method</a><a href="#program">World as code</a><a href="#refine-ch">Refinement</a><a href="#scene">Scene</a><a href="#objects">Objects</a>
+        <a href="#capture">What</a><a href="#robot-demo">Why</a><a href="#method">How</a><a href="#agent-work">Agent at work</a><a href="#scene">Kitchen</a><a href="#objects">Objects</a>
       </nav>
       <button class="tbtn" id="theme-toggle" type="button"><span>Light</span></button>
       <a class="tbtn" href="https://neoworldproject.github.io/Studio/?lang=en" target="_blank" rel="noopener">Studio ↗</a>
@@ -46,7 +48,7 @@
   </header>
 
   <nav class="toc" aria-label="Chapters">
-    <a href="#method"><b>01</b>The method</a><a href="#program"><b>02</b>A world as code</a><a href="#refine-ch"><b>03</b>Refinement</a><a href="#scene"><b>04</b>Scene</a><a href="#objects"><b>05</b>Objects</a>
+    <a href="#capture"><b>01</b>What it makes</a><a href="#robot-demo"><b>02</b>Why it matters</a><a href="#method"><b>03</b>How it works</a><a href="#agent-work"><b>04</b>The agent at work</a><a href="#program"><b>05</b>World as code</a><a href="#refine-ch"><b>06</b>Refinement</a><a href="#scene"><b>07</b>The kitchen</a><a href="#objects"><b>08</b>Objects</a>
   </nav>
 
   <main id="top">
@@ -57,7 +59,7 @@
           <p class="label">NeoWorld-3 · research</p>
           <h1 id="hero-title">Worlds robots can <em>use</em>, not just look at.</h1>
           <p class="lede">NeoWorld-3 turns photos into <b>simulation-ready 3D worlds</b>. Coding agents write every object as a program, with parts, joints and limits.</p>
-          <div class="cta"><a class="btn primary" href="#method">Start reading ↓</a><a class="btn" href="#scene">Explore the kitchen</a></div>
+          <div class="cta"><a class="btn primary" href="#capture">Start reading ↓</a><a class="btn" href="#scene">Explore the kitchen</a></div>
         </div>
       </div>
       <p class="hero-note">Scene 01 · reconstructed coffee corner<br>move the pointer · scroll to turn</p>
@@ -65,21 +67,48 @@
 
     <div class="wrap">
       <!-- 01 -->
+      <section class="chapter" id="capture" aria-labelledby="capture-h">
+        <div class="chapter-head"><span class="num">01</span><p class="label">What it makes</p><h2 id="capture-h">A photo, a rebuilt world, and the code underneath.</h2></div>
+        <div class="compare-wrap">
+          <div id="compare" aria-label="Drag the two dividers to compare the capture, the reconstruction and its code">
+            <canvas></canvas>
+            <span class="wipe-tag" data-layer="0">CAPTURE</span><span class="wipe-tag" data-layer="1">RECONSTRUCTION</span><span class="wipe-tag" data-layer="2">CODE</span>
+            <button class="xray-handle" data-handle="0" type="button" role="slider" aria-label="Divider between capture and reconstruction" aria-valuemin="0" aria-valuemax="100" aria-valuenow="34"><span>⇆</span></button>
+            <button class="xray-handle" data-handle="1" type="button" role="slider" aria-label="Divider between reconstruction and code" aria-valuemin="0" aria-valuemax="100" aria-valuenow="68"><span>&lt;/&gt;</span></button>
+          </div>
+          <div class="prose">
+            <p>Three layers of the same office coffee corner. On the left, the stabilised video. In the middle, the scene NeoWorld Studio rebuilt from it, rendered from the same camera. On the right, what the rebuilt scene really is: code.</p>
+            <p>The two pictures can look alike. The difference is underneath. Drag the <span class="mono">&lt;/&gt;</span> divider and each object shows its own code, pinned above it as the camera moves: the operations and measurements from the scene's real construction record.</p>
+            <p class="aside">In <em>The Matrix</em>, Neo learns to see his world as code. This is the same idea, made literal.</p>
+            <p><button class="btn" id="compare-play" type="button">Play</button></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 -->
+      <section class="chapter" id="robot-demo" aria-labelledby="robot-demo-h">
+        <div class="chapter-head"><span class="num">02</span><p class="label">Why it matters</p><h2 id="robot-demo-h">Then a robot can practise there.</h2></div>
+        <div class="prose"><p>A phone scans a desk. NeoWorld-3 rebuilds it as a world a robot can use. A policy rehearses the task in that twin: put the bowl in the microwave. Then the real robot does the same thing on the real desk.</p></div>
+        <div class="plate" id="twin">
+          <div class="plate-bar"><span>Real example · scan → twin → real</span><span>10-second recording</span></div>
+          <div class="twin-player"><canvas aria-label="Recording in three views: scanning the desk, the policy in the reconstructed twin, and the real robot"></canvas></div>
+          <div class="twin-controls"><button class="btn primary twin-play" type="button" aria-pressed="false">Play</button><input class="twin-range" type="range" min="0" max="99" value="0" aria-label="Position in the recording"></div>
+        </div>
+      </section>
+
+      <!-- 03 -->
       <section class="chapter" id="method" aria-labelledby="method-h">
-        <div class="chapter-head"><span class="num">01</span><p class="label">The method</p><h2 id="method-h">How NeoWorld-3 builds a world.</h2></div>
-        <div class="prose"><p>One figure, taken apart step by step. Keep scrolling: the figure zooms to each stage as you read about it, and the last step plays a real example.</p></div>
+        <div class="chapter-head"><span class="num">03</span><p class="label">How it works</p><h2 id="method-h">How the agent builds it.</h2></div>
+        <div class="prose"><p>One figure, taken apart step by step. Keep scrolling: the figure zooms to each stage as you read about it.</p></div>
         <div class="method">
           <div class="method-steps">
-            <div class="mstep" data-step="0"><p class="label">1 · Real observations</p><h3>Start from what a camera sees.</h3><p>A handful of RGB-D photos of a real place, each with its camera position. Here: an office coffee corner.</p></div>
-            <div class="mstep" data-step="1"><p class="label">2 · Scene agent</p><h3>One agent owns the whole scene.</h3><p>It looks at the photos, measures what it needs, and writes the scene as a program: boxes, cylinders and where they go. Then it keeps revising that program.</p></div>
-            <div class="mstep" data-step="2"><p class="label">3 · NeoMCP + NeoSDK</p><h3>Tools to build, measure and refine.</h3><p>NeoMCP gives the agent its tools: read, edit, measure, refine. NeoSDK does the geometry. Many candidate fits are tried in a fast GPU copy of the program, and a strict harness decides what is kept.</p></div>
-            <div class="mstep" data-step="3"><p class="label">4 · Object handoff</p><h3>Hard objects get a specialist.</h3><p>An object that needs more care, like the coffee machine, is handed over with its own evidence: the views that see it, its current source, and the objects around it.</p></div>
-            <div class="mstep" data-step="4"><p class="label">5 · Object specialists</p><h3>Write, fit, compare, repeat.</h3><p>The specialist writes a fresh program for that one object, fits it to the photos, and compares real and rendered views from the same cameras. If they disagree, it revises the code or refits the numbers. Cameras and neighbours stay fixed.</p></div>
-            <div class="mstep" data-step="5"><p class="label">6 · Parent integration</p><h3>Kept only if it is better.</h3><p>The returned object is tried in a copy of the scene and checked: geometry, who owns what, and whether it really improves the match. If not, the scene stays as it was.</p></div>
-            <div class="mstep" data-step="6"><p class="label">7 · Real–sim scene</p><h3>An editable scene that matches the photo.</h3><p>The result is rendered from the same camera as the real photo. Whatever still differs goes back to the scene agent for another round.</p></div>
-            <div class="mstep" data-step="7"><p class="label">8 · Articulation</p><h3>Parts that move get joints.</h3><p>Joints are declared in the code, swept through their range to catch collisions, and exported as URDF. Axes and limits the photos cannot confirm stay marked as unresolved.</p></div>
-            <div class="mstep" data-step="8"><p class="label">The whole loop</p><h3>From photos to a world a robot can use.</h3><p>Observe, build, check, refine, and hand the result to a robot, with feedback at every stage.</p></div>
-            <div class="mstep mstep-finale" data-step="9"><p class="label">A real example</p><h3>Scan it. Rehearse it. Do it.</h3><p>A phone scans a desk. A policy rehearses the task in the rebuilt twin: put the bowl in the microwave. Then the real robot does the same. Keep scrolling to move through the recording.</p></div>
+            <div class="mstep" data-step="0"><p class="label">1 · Observe</p><h3>Start from what a camera sees.</h3><p>A handful of RGB-D photos of a real place, each with its camera position. Here: an office coffee corner.</p></div>
+            <div class="mstep" data-step="1"><p class="label">2 · Write the scene as code</p><h3>One agent owns the whole scene.</h3><p>It looks, measures, and writes the scene as a program: boxes, cylinders and where they go. NeoMCP gives it tools to read, edit, measure and refine; NeoSDK does the geometry.</p></div>
+            <div class="mstep" data-step="2"><p class="label">3 · Specialists for hard objects</p><h3>Write, fit, compare, repeat.</h3><p>An object that needs more care, like the coffee machine, goes to a specialist with its own photos. It writes a program for that one object, fits it, and compares real and rendered views from the same cameras until they agree.</p></div>
+            <div class="mstep" data-step="3"><p class="label">4 · Checked before it is kept</p><h3>Kept only if it is better.</h3><p>Every returned change is tried in a copy of the scene and checked. If it does not improve the match, the scene stays exactly as it was. The next section shows six real examples.</p></div>
+            <div class="mstep" data-step="4"><p class="label">5 · Matched to the photo</p><h3>An editable scene that matches the photo.</h3><p>The result is rendered from the same camera as the real photo. Whatever still differs goes back to the scene agent for another round.</p></div>
+            <div class="mstep" data-step="5"><p class="label">6 · Joints</p><h3>Parts that move get joints.</h3><p>Joints are declared in the code, swept through their range to catch collisions, and exported for simulators. Axes and limits the photos cannot confirm stay marked as unresolved.</p></div>
+            <div class="mstep" data-step="6"><p class="label">The whole loop</p><h3>From photos to a world a robot can use.</h3><p>Observe, build, check, refine, and hand the result to a robot, with feedback at every stage.</p></div>
           </div>
           <div class="method-stage-wrap">
             <div class="mstage" aria-label="The NeoWorld-3 method figure, focused on the current step">
@@ -140,19 +169,28 @@
                   <path class="mg" data-arrow="d-artic" d="M1642 295H1682V890H137V902"/>
                 </svg>
               </div>
-              <div class="mfinale" aria-label="Real example: scanning, twin policy and real robot action">
-                <canvas></canvas>
-                <button class="btn mfinale-play" type="button">Play at real speed</button>
-              </div>
-              <span class="mstage-count">01 / 10</span>
+              <span class="mstage-count">01 / 07</span>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 02 -->
+      <!-- 04 -->
+      <section class="chapter" id="agent-work" aria-labelledby="agent-work-h">
+        <div class="chapter-head"><span class="num">04</span><p class="label">Watch the agent work</p><h2 id="agent-work-h">Every change is tested. Bad ones are undone.</h2></div>
+        <div class="prose"><p>These are real programs the agent wrote while improving the kitchen above, in order. Each one looks before it touches, changes one thing, checks that nothing else moved, and keeps a way back. When a change makes things worse, it is rolled back exactly.</p></div>
+<div class="redacted"><span class="label">Hidden in this preview</span><p>Six real edit programs from the agent's session on this kitchen, including a change it tried and then rolled back. Shown once the team agrees to publish them.</p></div>
+      </section>
+
+      <section class="lookcloser" aria-label="Look closer">
+        <p class="label">Look closer</p>
+        <h2>The pieces, one at a time.</h2>
+        <p>For readers who want the details: an object as code, how numbers get refined, the kitchen part by part, and ten articulated objects.</p>
+      </section>
+
+      <!-- 05 -->
       <section class="chapter" id="program" aria-labelledby="program-h">
-        <div class="chapter-head"><span class="num">02</span><p class="label">A world written as code</p><h2 id="program-h">Keep the recipe, not just the cake.</h2></div>
+        <div class="chapter-head"><span class="num">05</span><p class="label">A world written as code</p><h2 id="program-h">Keep the recipe, not just the cake.</h2></div>
         <div class="prose">
           <p>Most 3D methods predict a finished surface in one step. NeoWorld-3 keeps something more useful: the program that builds the object. Change one number in it and every part that depends on that number follows.</p>
           <div class="equation" aria-label="P equals S, theta, T">
@@ -182,9 +220,9 @@
         </div>
       </section>
 
-      <!-- 03 -->
+      <!-- 06 -->
       <section class="chapter" id="refine-ch" aria-labelledby="refine-h">
-        <div class="chapter-head"><span class="num">03</span><p class="label">Reasoning meets gradients</p><h2 id="refine-h">The agent sketches. The optimiser measures.</h2></div>
+        <div class="chapter-head"><span class="num">06</span><p class="label">Reasoning meets gradients</p><h2 id="refine-h">The agent sketches. The optimiser measures.</h2></div>
         <div class="prose">
           <p>Language models are good at structure (“a chair with four legs and a tilted back”) but poor at exact numbers. So NeoWorld-3 splits the work. The agent writes the program; an optimiser then tunes its named knobs until renders match the photos.</p>
 <p>Because the optimiser moves a few meaningful knobs rather than thousands of points, one <span class="mono">leg_length</span> keeps all four legs equal.</p>
@@ -205,23 +243,10 @@
         </div>
       </section>
 
-      <!-- 04 -->
+      <!-- 07 -->
       <section class="chapter" id="scene" aria-labelledby="scene-h">
-        <div class="chapter-head"><span class="num">04</span><p class="label">From capture to scene</p><h2 id="scene-h">A coffee corner, rebuilt part by part.</h2></div>
-        <div class="compare-wrap">
-          <div id="compare" aria-label="Drag the two dividers to compare the capture, the reconstruction and its code">
-            <canvas></canvas>
-            <span class="wipe-tag" data-layer="0">CAPTURE</span><span class="wipe-tag" data-layer="1">RECONSTRUCTION</span><span class="wipe-tag" data-layer="2">CODE</span>
-            <button class="xray-handle" data-handle="0" type="button" role="slider" aria-label="Divider between capture and reconstruction" aria-valuemin="0" aria-valuemax="100" aria-valuenow="34"><span>⇆</span></button>
-            <button class="xray-handle" data-handle="1" type="button" role="slider" aria-label="Divider between reconstruction and code" aria-valuemin="0" aria-valuemax="100" aria-valuenow="68"><span>&lt;/&gt;</span></button>
-          </div>
-          <div class="prose">
-            <p>Three layers of the same office coffee corner. On the left, the stabilised video. In the middle, the scene NeoWorld Studio rebuilt from it, rendered from the same camera. On the right, what the rebuilt scene really is: code.</p>
-            <p>The two pictures can look alike. The difference is underneath. Drag the <span class="mono">&lt;/&gt;</span> divider and each object shows its own code, pinned above it as the camera moves: the operations and measurements from the scene's real construction record.</p>
-            <p class="aside">In <em>The Matrix</em>, Neo learns to see his world as code. This is the same idea, made literal.</p>
-            <p><button class="btn" id="compare-play" type="button">Play</button></p>
-          </div>
-        </div>
+        <div class="chapter-head"><span class="num">07</span><p class="label">The kitchen, part by part</p><h2 id="scene-h">Explore the rebuilt kitchen.</h2></div>
+        <div class="prose"><p>Every part has a name, and every object has its own construction record. Hover to read names; switch to Code to read the record.</p></div>
         <div class="plate">
           <div class="plate-bar"><span>Scene 01 · <span id="scene-count">loading…</span></span>
             <span class="seg" role="group" aria-label="Look"><button type="button" data-scene-look="skin" aria-pressed="true">Rendered</button><button type="button" data-scene-look="parts" aria-pressed="false">Objects</button><button type="button" data-scene-look="wire" aria-pressed="false">Wire</button><button type="button" data-scene-look="code" aria-pressed="false">Code</button></span></div>
@@ -241,9 +266,9 @@
         </div>
       </section>
 
-      <!-- 05 -->
+      <!-- 08 -->
       <section class="chapter" id="objects" aria-labelledby="objects-h">
-        <div class="chapter-head"><span class="num">05</span><p class="label">Articulated objects</p><h2 id="objects-h">Ten objects. Every joint explicit.</h2></div>
+        <div class="chapter-head"><span class="num">08</span><p class="label">Articulated objects</p><h2 id="objects-h">Ten objects. Every joint explicit.</h2></div>
         <div class="prose"><p>Each object below was rebuilt from a single image, shown on the left. Every moving part has a declared joint type, axis and range. Play the motion, colour the parts, or show the joint axes.</p></div>
         <div class="plate">
           <div class="picker" id="gallery-picker" aria-label="Choose an object"></div>
