@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="object_101463">
+  <link name="fixed_root">
+    <visual name="bottle">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_000.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_000_material">
+        <color rgba="0.5699999928474426 0.6050000190734863 0.5799999833106995 1.0" />
+      </material>
+    </visual>
+  </link>
+  <link name="link_closure_turn">
+    <visual name="closure">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_001.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_001_material">
+        <color rgba="0.6100000143051147 0.6399999856948853 0.6150000095367432 1.0" />
+      </material>
+    </visual>
+  </link>
+  <link name="link_head_swivel">
+    <visual name="housing_pivot_left">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_002.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_002_material">
+        <color rgba="0.10499999672174454 0.125 0.1120000034570694 1.0" />
+      </material>
+    </visual>
+    <visual name="housing_pivot_right">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_003.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_003_material">
+        <color rgba="0.10499999672174454 0.125 0.1120000034570694 1.0" />
+      </material>
+    </visual>
+    <visual name="nozzle_mount">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_004.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_004_material">
+        <color rgba="0.6499999761581421 0.6800000071525574 0.6499999761581421 1.0" />
+      </material>
+    </visual>
+    <visual name="pump_housing">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_005.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_005_material">
+        <color rgba="0.6499999761581421 0.6800000071525574 0.6499999761581421 1.0" />
+      </material>
+    </visual>
+    <visual name="pump_lower_stem">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_006.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_006_material">
+        <color rgba="0.6499999761581421 0.6800000071525574 0.6499999761581421 1.0" />
+      </material>
+    </visual>
+    <visual name="pump_support_dome">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_007.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_007_material">
+        <color rgba="0.6499999761581421 0.6800000071525574 0.6499999761581421 1.0" />
+      </material>
+    </visual>
+    <visual name="nozzle">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_008.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_008_material">
+        <color rgba="0.6600000262260437 0.6899999976158142 0.6600000262260437 1.0" />
+      </material>
+    </visual>
+  </link>
+  <link name="link_trigger_hinge">
+    <visual name="trigger">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_009.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_009_material">
+        <color rgba="0.6600000262260437 0.6899999976158142 0.6549999713897705 1.0" />
+      </material>
+    </visual>
+  </link>
+  <link name="link_plunger_slide">
+    <visual name="plunger">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_010.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_010_material">
+        <color rgba="0.6000000238418579 0.6299999952316284 0.6000000238418579 1.0" />
+      </material>
+    </visual>
+  </link>
+  <joint name="closure_turn" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_closure_turn" />
+    <origin xyz="0 0.119999997318 0.554000020027" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.3490658503988659" upper="0.3490658503988659" effort="0" velocity="0" />
+  </joint>
+  <joint name="head_swivel" type="revolute">
+    <parent link="link_closure_turn" />
+    <child link="link_head_swivel" />
+    <origin xyz="0 0 0.0434949994087" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.3490658503988659" upper="0.3490658503988659" effort="0" velocity="0" />
+  </joint>
+  <joint name="trigger_hinge" type="revolute">
+    <parent link="link_head_swivel" />
+    <child link="link_trigger_hinge" />
+    <origin xyz="-2.16840434497e-19 -0.234999999404 0.244504988194" rpy="0 0 0" />
+    <axis xyz="1 3.93407176878e-19 0" />
+    <limit lower="0.0" upper="0.17453292519943295" effort="0" velocity="0" />
+  </joint>
+  <joint name="plunger_slide" type="prismatic">
+    <parent link="link_head_swivel" />
+    <child link="link_plunger_slide" />
+    <origin xyz="0 -0.157999992371 0.210505008698" rpy="0 0 0" />
+    <axis xyz="-1.1354260557e-18 0.615921974182 0.787807166576" />
+    <limit lower="0.0" upper="0.007964728154396097" effort="0" velocity="0" />
+  </joint>
+</robot>

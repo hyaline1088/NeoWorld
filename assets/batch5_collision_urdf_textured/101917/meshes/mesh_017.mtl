@@ -1,0 +1,12 @@
+# Blender 4.5.0 MTL File: 'static.blend'
+# www.blender.org
+
+newmtl grate_front_left_cast_iron
+Ns 168.100021
+Ka 0.380000 0.380000 0.380000
+Kd 0.115000 0.122000 0.120000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 3

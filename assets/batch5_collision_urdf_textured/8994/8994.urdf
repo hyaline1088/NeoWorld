@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="object_8994">
+  <link name="fixed_root">
+    <visual name="frame">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_000.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_000_material">
+        <color rgba="1 1 1 1" />
+        <texture filename="textures/mesh_000_basecolor.png" />
+      </material>
+    </visual>
+  </link>
+  <link name="link_door_hinge">
+    <visual name="door_leaf">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_001.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_001_material">
+        <color rgba="0.4000000059604645 0.3499999940395355 0.054999999701976776 1.0" />
+      </material>
+    </visual>
+  </link>
+  <link name="link_knob_spindle">
+    <visual name="door_knob">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_002.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_002_material">
+        <color rgba="0.38999998569488525 0.34700000286102295 0.10199999809265137 1.0" />
+      </material>
+    </visual>
+  </link>
+  <joint name="door_hinge" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_door_hinge" />
+    <origin xyz="0.18198299408 -0.0238292999566 0" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="0.0" upper="0.5235987755982988" effort="0" velocity="0" />
+  </joint>
+  <joint name="knob_spindle" type="revolute">
+    <parent link="link_door_hinge" />
+    <child link="link_knob_spindle" />
+    <origin xyz="-0.33412078023 0 0.582547724247" rpy="0 0 0" />
+    <axis xyz="-1.24755328286e-18 1 0" />
+    <limit lower="-0.5235987755982988" upper="0.5235987755982988" effort="0" velocity="0" />
+  </joint>
+</robot>

@@ -1,0 +1,32 @@
+# Blender 4.5.0 MTL File: 'static.blend'
+# www.blender.org
+
+newmtl scored_blade_steel
+Ns 490.000000
+Ka 0.920000 0.920000 0.920000
+Kd 0.600000 0.650000 0.630000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 3
+
+newmtl slider_black_plastic
+Ns 324.899994
+Ka 1.000000 1.000000 1.000000
+Kd 0.012000 0.015000 0.009000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl thumb_print
+Ns 270.399994
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd ../textures/stanley_print_generated.png

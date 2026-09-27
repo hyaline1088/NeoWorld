@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="100842">
+  <link name="fixed_root">
+    <visual name="fixed_root_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/fixed_root.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_front_lid_hinge">
+    <visual name="link_front_lid_hinge_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_front_lid_hinge.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_top_carry_handle_fold">
+    <visual name="link_top_carry_handle_fold_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_top_carry_handle_fold.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_side_carry_handle_fold">
+    <visual name="link_side_carry_handle_fold_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_side_carry_handle_fold.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_wheel_front_left_roll">
+    <visual name="link_wheel_front_left_roll_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_wheel_front_left_roll.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_wheel_front_right_roll">
+    <visual name="link_wheel_front_right_roll_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_wheel_front_right_roll.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_wheel_rear_left_roll">
+    <visual name="link_wheel_rear_left_roll_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_wheel_rear_left_roll.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_wheel_rear_right_roll">
+    <visual name="link_wheel_rear_right_roll_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_wheel_rear_right_roll.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_telescoping_handle_slide">
+    <visual name="link_telescoping_handle_slide_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_telescoping_handle_slide.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <joint name="front_lid_hinge" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_front_lid_hinge" />
+    <origin xyz="-0.246560007334 -0.0816499963403 0.40000000596" rpy="0 -0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.785398163397" upper="0" effort="1" velocity="1" />
+  </joint>
+  <joint name="top_carry_handle_fold" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_top_carry_handle_fold" />
+    <origin xyz="-0.0200100000948 0.0142139997333 0.757916808128" rpy="0 -0 0" />
+    <axis xyz="1 -3.49626538818e-18 0" />
+    <limit lower="-0.610865238198" upper="0.610865238198" effort="1" velocity="1" />
+  </joint>
+  <joint name="side_carry_handle_fold" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_side_carry_handle_fold" />
+    <origin xyz="0.213440001011 0.00344999996014 0.387580007315" rpy="0 -0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.610865238198" upper="0.610865238198" effort="1" velocity="1" />
+  </joint>
+  <joint name="wheel_front_left_roll" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_wheel_front_left_roll" />
+    <origin xyz="-0.139610007405 -0.0586499981582 0.0240000002086" rpy="0 -0 0" />
+    <axis xyz="1 -3.49626538818e-18 0" />
+    <limit lower="-0.785398163397" upper="0.785398163397" effort="1" velocity="1" />
+  </joint>
+  <joint name="wheel_front_right_roll" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_wheel_front_right_roll" />
+    <origin xyz="0.0995900034904 -0.0586499981582 0.0240000002086" rpy="0 -0 0" />
+    <axis xyz="1 -3.49626538818e-18 0" />
+    <limit lower="-0.785398163397" upper="0.785398163397" effort="1" velocity="1" />
+  </joint>
+  <joint name="wheel_rear_left_roll" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_wheel_rear_left_roll" />
+    <origin xyz="-0.139610007405 0.0586499981582 0.0240000002086" rpy="0 -0 0" />
+    <axis xyz="1 -3.49626538818e-18 0" />
+    <limit lower="-0.785398163397" upper="0.785398163397" effort="1" velocity="1" />
+  </joint>
+  <joint name="wheel_rear_right_roll" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_wheel_rear_right_roll" />
+    <origin xyz="0.0995900034904 0.0586499981582 0.0240000002086" rpy="0 -0 0" />
+    <axis xyz="1 -3.49626538818e-18 0" />
+    <limit lower="-0.785398163397" upper="0.785398163397" effort="1" velocity="1" />
+  </joint>
+  <joint name="telescoping_handle_slide" type="prismatic">
+    <parent link="fixed_root" />
+    <child link="link_telescoping_handle_slide" />
+    <origin xyz="-0.0200100000948 0.0776939988136 0.757916808128" rpy="0 -0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.0403009283002" upper="0" effort="1" velocity="1" />
+  </joint>
+</robot>

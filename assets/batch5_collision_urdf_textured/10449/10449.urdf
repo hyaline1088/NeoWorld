@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="object_10449">
+  <link name="fixed_root">
+    <visual name="lower_half">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_000.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_000_material">
+        <color rgba="1 1 1 1" />
+        <texture filename="textures/mesh_000_basecolor.png" />
+      </material>
+    </visual>
+    <visual name="pivot_fastener">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_001.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_001_material">
+        <color rgba="0.25 0.3100000023841858 0.3199999928474426 1.0" />
+      </material>
+    </visual>
+  </link>
+  <link name="link_scissor_pivot">
+    <visual name="upper_half">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_002.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_002_material">
+        <color rgba="1 1 1 1" />
+        <texture filename="textures/mesh_002_basecolor.png" />
+      </material>
+    </visual>
+  </link>
+  <joint name="scissor_pivot" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_scissor_pivot" />
+    <origin xyz="-1.73472347598e-18 -0.0149999996647 0.0077999997884" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.3490658503988659" upper="0.3490658503988659" effort="0" velocity="0" />
+  </joint>
+</robot>

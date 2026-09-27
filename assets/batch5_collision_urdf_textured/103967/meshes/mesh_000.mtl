@@ -1,0 +1,12 @@
+# Blender 4.5.0 MTL File: 'static.blend'
+# www.blender.org
+
+newmtl stand_cream_educational_print
+Ns 10.000005
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd ../textures/stand_cream_educational_print_packed_artwork.webp
+map_Ke ../textures/stand_cream_educational_print_packed_artwork.webp

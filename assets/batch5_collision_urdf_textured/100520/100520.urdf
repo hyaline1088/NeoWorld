@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="100520">
+  <link name="fixed_root">
+    <visual name="fixed_root_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/fixed_root.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_left_link_pivot">
+    <visual name="link_left_link_pivot_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_left_link_pivot.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_right_link_pivot">
+    <visual name="link_right_link_pivot_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_right_link_pivot.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_seat_fold">
+    <visual name="link_seat_fold_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_seat_fold.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_rear_frame_fold">
+    <visual name="link_rear_frame_fold_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_rear_frame_fold.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <joint name="left_link_pivot" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_left_link_pivot" />
+    <origin xyz="-0.293221592903 0.00764329917729 0.517520010471" rpy="0 -0 0" />
+    <axis xyz="1 1.09123837757e-18 0" />
+    <limit lower="-0.0872664625997" upper="0.0872664625997" effort="1" velocity="1" />
+  </joint>
+  <joint name="right_link_pivot" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_right_link_pivot" />
+    <origin xyz="0.293221592903 0.00764329917729 0.517520010471" rpy="0 -0 0" />
+    <axis xyz="1 1.09123837757e-18 0" />
+    <limit lower="-0.0872664625997" upper="0.0872664625997" effort="1" velocity="1" />
+  </joint>
+  <joint name="seat_fold" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_seat_fold" />
+    <origin xyz="0 -0.0284391753376 0.46751999855" rpy="0 -0 0" />
+    <axis xyz="1 1.09123837757e-18 0" />
+    <limit lower="-1.570796326795" upper="0" effort="1" velocity="1" />
+  </joint>
+  <joint name="rear_frame_fold" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_rear_frame_fold" />
+    <origin xyz="2.16840434497e-19 0.0852061882615 0.625" rpy="0 -0 0" />
+    <axis xyz="1 1.09123837757e-18 0" />
+    <limit lower="-1.047197551197" upper="0.0349065850399" effort="1" velocity="1" />
+  </joint>
+</robot>

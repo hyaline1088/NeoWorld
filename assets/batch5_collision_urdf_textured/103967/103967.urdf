@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="object_103967">
+  <link name="fixed_root">
+    <visual name="flared_printed_paper_stand">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_000.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_000_material">
+        <color rgba="1 1 1 1" />
+        <texture filename="textures/stand_cream_educational_print_packed_artwork.png" />
+      </material>
+    </visual>
+  </link>
+  <link name="link_globe_spin">
+    <visual name="printed_paper_globe">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/mesh_001.obj" scale="1 1 1" />
+      </geometry>
+      <material name="mesh_001_material">
+        <color rgba="1 1 1 1" />
+        <texture filename="textures/globe_matte_printed_paper_packed_artwork.png" />
+      </material>
+    </visual>
+  </link>
+  <joint name="globe_spin" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_globe_spin" />
+    <origin xyz="0 1.01643953671e-19 0.155000001192" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.5235987755982988" upper="0.5235987755982988" effort="0" velocity="0" />
+  </joint>
+</robot>

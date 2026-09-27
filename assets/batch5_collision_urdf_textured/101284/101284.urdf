@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="101284">
+  <link name="fixed_root">
+    <visual name="fixed_root_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/fixed_root.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_temple_left_hinge">
+    <visual name="link_temple_left_hinge_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_temple_left_hinge.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="link_temple_right_hinge">
+    <visual name="link_temple_right_hinge_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/link_temple_right_hinge.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <joint name="temple_left_hinge" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_temple_left_hinge" />
+    <origin xyz="-0.486000001431 0.0109999999404 0.279532492161" rpy="0 -0 0" />
+    <axis xyz="0 0 -1" />
+    <limit lower="0" upper="1.0471975512" effort="1" velocity="1" />
+  </joint>
+  <joint name="temple_right_hinge" type="revolute">
+    <parent link="fixed_root" />
+    <child link="link_temple_right_hinge" />
+    <origin xyz="0.486000001431 0.0109999999404 0.279532492161" rpy="0 -0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="0" upper="1.0471975512" effort="1" velocity="1" />
+  </joint>
+</robot>

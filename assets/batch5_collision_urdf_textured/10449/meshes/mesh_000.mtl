@@ -1,0 +1,12 @@
+# Blender 4.5.0 MTL File: 'static.blend'
+# www.blender.org
+
+newmtl lower_half_steel.001
+Ns 518.400024
+Ka 0.940000 0.940000 0.940000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 3
+map_Kd ../textures/mesh_000_basecolor.webp

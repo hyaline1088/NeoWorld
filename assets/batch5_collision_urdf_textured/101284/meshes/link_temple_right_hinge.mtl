@@ -1,0 +1,12 @@
+# Blender 4.5.0 MTL File: 'static.blend'
+# www.blender.org
+
+newmtl temple_right_blue_with_print
+Ns 608.399963
+Ka 0.320000 0.320000 0.320000
+Kd 0.100000 0.200000 0.420000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 3

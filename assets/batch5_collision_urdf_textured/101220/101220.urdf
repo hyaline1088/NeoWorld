@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="101220">
+  <link name="fixed_root">
+    <visual name="fixed_root_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/fixed_root.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="moving_group">
+    <visual name="moving_group_visual">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/moving_group.obj" />
+      </geometry>
+    </visual>
+  </link>
+  <joint name="joint_01" type="revolute">
+    <parent link="fixed_root" />
+    <child link="moving_group" />
+    <origin xyz="0 -0.0329999998212 0.5" rpy="0 -0 0" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.261799387799" upper="0.261799387799" effort="1" velocity="1" />
+  </joint>
+</robot>
