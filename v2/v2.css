@@ -138,6 +138,120 @@ input[type=range]{width:100%;accent-color:var(--accent-line)}
 .loop-core{fill:var(--muted);font:600 12px var(--mono);letter-spacing:.1em}
 @media (max-width:800px){.loop{grid-template-columns:minmax(0,1fr)}.loop-graphic{top:62px;height:260px;background:var(--bg);z-index:5;border-bottom:1px solid var(--line)}.loop-graphic svg{width:240px}.loop-steps{padding-block:8vh 20vh;gap:28vh}}
 
+/* Method: steps scroll on the left, the figure stays pinned on the right and zooms to each step */
+.method{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.6fr);gap:clamp(24px,4vw,56px);margin-top:28px}
+.method-steps{padding-block:16vh 34vh;display:grid;gap:52vh}
+.mstep{display:grid;gap:10px;opacity:.3;transition:opacity .4s}
+.mstep.on{opacity:1}
+.mstep .label{color:var(--accent)}
+.mstep h3{font-size:clamp(24px,2.4vw,30px)}
+.mstep p:not(.label){font-size:17.5px;line-height:1.6;color:var(--muted)}
+.mstep.on p:not(.label){color:var(--ink)}
+.mstep-finale{min-height:190vh;align-content:start}
+.method-stage-wrap{position:relative}
+.mstage{position:sticky;top:84px;height:min(76vh,700px);border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg-2)}
+.mboard{position:absolute;left:0;top:0;width:1690px;height:1127px;transform-origin:0 0;will-change:transform}
+.mstage-count{position:absolute;right:14px;bottom:12px;z-index:5;font:600 11px/1 var(--mono);letter-spacing:.1em;color:var(--muted);background:color-mix(in srgb,var(--bg) 80%,transparent);padding:6px 8px;border-radius:3px}
+.mgroup{position:absolute;border:2px solid var(--line);border-radius:30px;transition:opacity .5s,border-color .5s}
+.mgroup h4{position:absolute;display:flex;align-items:center;gap:14px;margin:0;font:500 34px/1 var(--serif);color:var(--ink)}
+.mgroup h4 svg{width:40px;height:40px;fill:var(--ink)}
+.g-recon{left:327px;top:90px;width:1340px;height:755px;background:color-mix(in srgb,var(--accent-fill) 4%,var(--bg-2))}
+.g-recon h4{left:0;right:0;top:20px;justify-content:center}
+.g-spec{left:349px;top:488px;width:948px;height:335px;background:color-mix(in srgb,var(--sky) 5%,var(--surface))}
+.g-spec h4{left:22px;top:18px;font-size:27px}
+.g-spec .mnote{position:absolute;right:26px;top:22px;font:400 19px/1 var(--serif);color:var(--muted)}
+.g-artic{left:25px;top:907px;width:1640px;height:200px;background:color-mix(in srgb,#3f9a7a 7%,var(--surface))}
+.g-artic h4{left:22px;top:22px;font-size:29px}
+.msteps3{position:absolute;left:34px;top:82px;display:flex;align-items:center;gap:18px}
+.msteps3 span{padding:14px 24px;border:2px solid var(--line);border-radius:8px;background:var(--surface);font:500 21px/1 var(--serif)}
+.msteps3 i{font-style:normal;color:#3f9a7a;font-size:26px}
+.g-artic .mcap{position:absolute;left:240px;top:160px;margin:0;font:400 18px/1 var(--serif);color:var(--muted)}
+.mb{position:absolute;display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 18px;border:2px solid var(--line);border-radius:18px;background:var(--surface);transition:opacity .5s,border-color .5s,box-shadow .5s}
+.mb h4{margin:0;align-self:flex-start;font:500 27px/1.15 var(--serif);color:var(--ink)}
+.mb p{margin:0;font:400 19px/1.3 var(--serif);color:var(--muted);text-align:center}
+.mb p.mleft{text-align:left;align-self:flex-start}
+.b-obs{left:25px;top:128px;width:270px;height:277px}
+.b-agent{left:355px;top:173px;width:270px;height:240px}
+.b-mcp{left:670px;top:173px;width:630px;height:240px;align-items:stretch}
+.b-realsim{left:1347px;top:145px;width:295px;height:295px}
+.b-handoff{left:25px;top:505px;width:270px;height:340px}
+.b-author{left:370px;top:551px;width:280px;height:237px}
+.b-refine{left:676px;top:551px;width:291px;height:237px}
+.b-feedback{left:992px;top:551px;width:283px;height:237px}
+.b-parent{left:1347px;top:542px;width:295px;height:260px}
+.b-author h4,.b-refine h4,.b-feedback h4{font-size:22px;white-space:nowrap}
+.b-author,.b-refine,.b-feedback{gap:8px;padding:14px 14px}
+.b-refine .mpair img,.b-feedback .mpair img{height:112px}
+.b-robot{left:1017px;top:922px;width:625px;height:177px;flex-direction:row;padding:0;border:0;background:none;gap:26px;align-items:center}
+.b-robot img{width:265px;height:177px;object-fit:cover;border-radius:6px}
+.b-robot h4{font-size:27px;margin-bottom:12px}
+.mworker{position:absolute;left:510px;top:798px;margin:0;font:400 17px/1 var(--serif);color:var(--muted)}
+.mimgs{display:flex;gap:8px}
+.mimgs img{width:112px;height:149px;object-fit:cover;border-radius:4px}
+.mpair{display:flex;gap:10px}
+.mpair figure{margin:0;display:grid;gap:4px;justify-items:center}
+.mpair figcaption{font:600 16px/1 var(--serif);color:#c46a2a}
+.mpair figcaption.sim{color:#3f9a7a}
+.mpair img{width:118px;height:120px;object-fit:cover;border-radius:4px}
+.b-realsim .mpair img{width:128px;height:170px}
+.crop-coffee{object-position:60% 55%}
+.crop-stools{object-position:35% 70%}
+.mhand{display:flex;align-items:center;gap:14px;align-self:stretch}
+.mhand img{width:92px;height:90px;object-fit:cover;border-radius:4px}
+.b-handoff .mhand .mleft{font-size:21px;color:var(--ink);line-height:1.2}
+.mrow{display:flex;gap:22px;align-items:center}
+.mcode{margin:0;padding:10px 14px;border:1.5px solid var(--line);border-radius:6px;background:var(--bg);font:400 17px/1.35 var(--mono);color:var(--ink);display:grid}
+.mcode span{overflow:hidden;white-space:nowrap}
+.mlist{display:grid;gap:6px;font:400 20px/1.2 var(--serif);color:var(--ink)}
+.mlist b{font-weight:600;font-size:23px}
+.micon{width:120px;height:80px;fill:none;stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.micon .fill{fill:var(--ink)}
+.micon.cam{width:128px;height:56px}
+.micon.cam .ray{fill:color-mix(in srgb,var(--sky) 18%,transparent);stroke:var(--sky)}
+.micon.parts{width:150px;height:100px}
+.micon.parts .c1{fill:color-mix(in srgb,var(--sky) 30%,transparent)}
+.micon.parts .c2{fill:color-mix(in srgb,var(--accent-fill) 35%,transparent)}
+.micon.parts .c3{fill:color-mix(in srgb,var(--warn) 35%,transparent)}
+.marrows{position:absolute;inset:0;width:1690px;height:1127px;overflow:visible;pointer-events:none}
+.marrows marker path{fill:var(--muted)}
+.ma,.md,.mg{fill:none;stroke-width:3.2;marker-end:url(#mhead);transition:stroke .4s,opacity .4s}
+.ma{stroke:var(--muted)}
+.md{stroke:#c46a2a;stroke-dasharray:12 10}
+.mg{stroke:#3f9a7a;stroke-dasharray:12 10}
+.mlabel{font:400 21px var(--serif);fill:#c46a2a}
+/* Focus: blocks outside the current step fade back; the current ones get an accent outline */
+.mboard:not(.all) .mb:not(.on),.mboard:not(.all) .mgroup[data-block]:not(.on){opacity:.28}
+.mboard:not(.all) .mworker{opacity:.4}
+.mb.on,.mgroup[data-block].on{border-color:var(--accent-line)}
+.mboard:not(.all) .mb.on{box-shadow:0 0 0 4px color-mix(in srgb,var(--accent-fill) 22%,transparent),0 14px 40px #0004}
+.mboard:not(.all) [data-arrow]:not(.on){opacity:.25}
+.ma.on{stroke:var(--accent-line)}
+.md.on,.mg.on{animation:mflow 1s linear infinite}
+@keyframes mflow{to{stroke-dashoffset:-44}}
+/* Scene agent's code types itself when the tools step is active */
+.b-mcp.on .mcode span{animation:mtype 1.1s steps(12) both}
+.b-mcp.on .mcode span:nth-child(2){animation-delay:.5s}
+.b-mcp.on .mcode span:nth-child(3){animation-delay:1s}
+@keyframes mtype{from{max-width:0}to{max-width:14ch}}
+/* Specialists: the three steps take turns, like one pass of the loop */
+.mboard.run .b-author,.mboard.run .b-refine,.mboard.run .b-feedback{animation:mturn 3.6s infinite}
+.mboard.run .b-refine{animation-delay:1.2s}
+.mboard.run .b-feedback{animation-delay:2.4s}
+@keyframes mturn{0%,30%{box-shadow:0 0 0 5px color-mix(in srgb,var(--accent-fill) 45%,transparent),0 14px 40px #0004}34%,100%{box-shadow:0 0 0 0 transparent}}
+/* The real example replaces the figure in the last step */
+.mfinale{position:absolute;inset:0;z-index:4;background:#0c0e0b;display:grid;opacity:0;visibility:hidden;transition:opacity .6s,visibility .6s}
+.mfinale canvas{width:100%;height:100%}
+.mfinale-play{position:absolute;left:14px;bottom:12px;background:rgba(12,14,11,.8);color:#e9ece3}
+#method.show-finale .mfinale{opacity:1;visibility:visible}
+@media (max-width:900px){
+  .method{grid-template-columns:minmax(0,1fr)}
+  .method-stage-wrap{order:-1;position:sticky;top:62px;z-index:6}
+  .mstage{position:relative;top:0;height:46vh}
+  .method-steps{padding-block:6vh 20vh;gap:36vh}
+  .mstep-finale{min-height:120vh}
+}
+@media (prefers-reduced-motion:reduce){.md.on,.mg.on,.b-mcp.on .mcode span,.mboard.run .mb{animation:none}}
+
 /* 03 anatomy */
 .anatomy{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,1fr)}
 #anatomy-stage{min-height:min(66vh,580px)}
