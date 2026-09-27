@@ -66,7 +66,7 @@
   }));
 
   /* Rehearsal rule: a plan is kept only if at least 4 of 5 perturbed rehearsals succeed. */
-  const trials = $$('.trial');
+  const trials = $$('#rehearsal .trial');
   const verdict = () => {
     const ok = trials.filter(t => t.getAttribute('aria-pressed') === 'true').length;
     $('#rehearsal-verdict').innerHTML = ok >= 4

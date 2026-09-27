@@ -13,7 +13,8 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "preview"
 OUT = ROOT / "site-v2"
-FORBIDDEN = ["paper:start", "data-public", "RoboCasa", "ALOHA", "3DCodeBench", "PartNet", "Articraft", "VIGA",
+INTERNAL_DATA = {"scene-01-agent-edits.json"}  # internal team handoff; not published until cleared
+FORBIDDEN = ["paper:start", "internal:start", "RESTORED_EXACT_OLD_MATRICES", "faucet_deck", "/data/neoworld", "data-public", "RoboCasa", "ALOHA", "3DCodeBench", "PartNet", "Articraft", "VIGA",
              "Chamfer", "DINOv3", "ICLR", "double-blind", "0.0365", "87.74", "33.33", "MuJoCo", "Adam"]
 VENDOR = ["three.min.js", "three.LICENSE", "OBJLoader.js", "OrbitControls.js", "GLTFLoader.js", "DRACOLoader.js",
           "gsap.min.js", "ScrollTrigger.min.js", "draco/draco_decoder.js", "draco/draco_decoder.wasm", "draco/draco_wasm_wrapper.js"]
@@ -37,6 +38,8 @@ def strip_paper(html: str) -> str:
     # The note explaining the markers mentions them by name, so it has to go first.
     html = re.sub(r"[ \t]*<!-- Paper-derived blocks.*?-->\n", "", html, flags=re.S)
     html = re.sub(r"[ \t]*<!-- paper:start -->.*?<!-- paper:end -->", "", html, flags=re.S)
+    # Internal team material (not cleared for publication) is handled the same way.
+    html = re.sub(r"[ \t]*<!-- internal:start -->.*?<!-- internal:end -->", "", html, flags=re.S)
     return re.sub(r"<template data-public>(.*?)</template>", r"\1", html, flags=re.S)
 
 
@@ -46,7 +49,8 @@ def build() -> None:
     v2 = SRC / "v2"
     (OUT / "v2").mkdir(parents=True)
     (OUT / "v2" / "index.html").write_text(strip_paper((v2 / "index.html").read_text(encoding="utf-8")), encoding="utf-8")
-    for path in [v2 / "v2.css", *sorted((v2 / "js").glob("*.js")), *sorted((v2 / "fonts").iterdir()), *sorted((v2 / "data").glob("*.json")),
+    data = [p for p in sorted((v2 / "data").glob("*.json")) if p.name not in INTERNAL_DATA]
+    for path in [v2 / "v2.css", *sorted((v2 / "js").glob("*.js")), *sorted((v2 / "fonts").iterdir()), *data,
                  *sorted((v2 / "media").rglob("*.webp"))]:
         copy(path, OUT / "v2" / path.relative_to(v2))
     for name in VENDOR:
