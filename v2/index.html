@@ -19,6 +19,7 @@
   <script defer src="../vendor/gsap.min.js"></script>
   <script defer src="../vendor/ScrollTrigger.min.js"></script>
   <script defer src="js/kit.js"></script>
+  <script defer src="js/scene-code.js"></script>
   <script defer src="js/hero.js"></script>
   <script defer src="js/door.js"></script>
   <script defer src="js/anatomy.js"></script>
@@ -226,24 +227,33 @@
       <section class="chapter" id="scene" aria-labelledby="scene-h">
         <div class="chapter-head"><span class="num">07</span><p class="label">From capture to scene</p><h2 id="scene-h">A coffee corner, rebuilt part by part.</h2></div>
         <div class="compare-wrap">
-          <div id="compare" aria-label="Drag to compare the original capture with the reconstruction">
+          <div id="compare" aria-label="Drag the two dividers to compare the capture, the reconstruction and its code">
             <canvas></canvas>
-            <div class="xray-tags" aria-hidden="true"><span>CAPTURE</span><span>RECONSTRUCTION</span></div>
-            <button class="xray-handle" type="button" role="slider" aria-label="Comparison divider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span>⇆</span></button>
+            <span class="wipe-tag" data-layer="0">CAPTURE</span><span class="wipe-tag" data-layer="1">RECONSTRUCTION</span><span class="wipe-tag" data-layer="2">CODE</span>
+            <button class="xray-handle" data-handle="0" type="button" role="slider" aria-label="Divider between capture and reconstruction" aria-valuemin="0" aria-valuemax="100" aria-valuenow="34"><span>⇆</span></button>
+            <button class="xray-handle" data-handle="1" type="button" role="slider" aria-label="Divider between reconstruction and code" aria-valuemin="0" aria-valuemax="100" aria-valuenow="68"><span>&lt;/&gt;</span></button>
           </div>
           <div class="prose">
-            <p>On the left, a stabilised video of an office coffee corner. On the right, the scene NeoWorld Studio rebuilt from it, rendered from the same camera. Drag across to compare.</p>
-            <p>The two can look alike. The difference is underneath: the reconstruction is made of named objects, each built by its own program, so each can be moved, edited or simulated on its own.</p>
+            <p>Three layers of the same office coffee corner. On the left, the stabilised video. In the middle, the scene NeoWorld Studio rebuilt from it, rendered from the same camera. On the right, what the rebuilt scene really is: code.</p>
+            <p>The two pictures can look alike. The difference is underneath. The code layer shows the scene's real construction record, the operations and measurements that build each part. Drag the <span class="mono">&lt;/&gt;</span> divider to see more of it.</p>
+            <p class="aside">In <em>The Matrix</em>, Neo learns to see his world as code. This is the same idea, made literal.</p>
             <p><button class="btn" id="compare-play" type="button">Play</button></p>
           </div>
         </div>
         <div class="plate">
           <div class="plate-bar"><span>Scene 01 · <span id="scene-count">loading…</span></span>
-            <span class="seg" role="group" aria-label="Look"><button type="button" data-scene-look="skin" aria-pressed="true">Rendered</button><button type="button" data-scene-look="parts" aria-pressed="false">Objects</button><button type="button" data-scene-look="wire" aria-pressed="false">Wire</button></span></div>
-          <div class="stage" id="scene-stage">
-            <span class="stage-status">Loading the kitchen (2.3 MB)…</span>
-            <div class="part-tip" hidden></div>
-            <span class="hint">hover a part to read its name · drag to turn</span>
+            <span class="seg" role="group" aria-label="Look"><button type="button" data-scene-look="skin" aria-pressed="true">Rendered</button><button type="button" data-scene-look="parts" aria-pressed="false">Objects</button><button type="button" data-scene-look="wire" aria-pressed="false">Wire</button><button type="button" data-scene-look="code" aria-pressed="false">Code</button></span></div>
+          <div class="scene-body" id="scene-body">
+            <div class="stage" id="scene-stage">
+              <span class="stage-status">Loading the kitchen (2.3 MB)…</span>
+              <div class="part-tip" hidden></div>
+              <span class="hint">hover a part to read its name · drag to turn · in Code, click a part</span>
+            </div>
+            <aside class="scene-code" id="scene-code-panel" hidden aria-label="Construction record of the selected object">
+              <div class="scene-code-head"><b id="scene-code-title">Loading…</b><span>construction record from scene.glb</span></div>
+              <pre class="code" id="scene-code"></pre>
+              <p class="scene-code-key"><span class="k-op">coloured part</span> built by a recorded SDK operation · <span class="k-mesh">grey part</span> stored as a mesh</p>
+            </aside>
           </div>
           <div class="chips" id="scene-legend" aria-label="Objects in the scene: click to isolate one"></div>
         </div>
